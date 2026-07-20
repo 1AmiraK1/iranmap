@@ -1,63 +1,46 @@
-const map = L.map('map', {
-    zoomControl: true,
-    attributionControl: false
-});
+import { map } from './map.js';
+import { states, mapConfig, styles } from './config.js';
+import { onEachProvince } from './province.js';
+import { onEachCounty } from './county.js';
 
-map.setView([32.4, 53.7], 5);
 
-let provincesLayer;
-
-fetch('data/iran-provinces.geojson')
-    .then(response => response.json())
+fetch('../../data/provinces.geojson')
+    .then(res => res.json())
     .then(data => {
-
-        provincesLayer = L.geoJSON(data, {
-
-            style: provinceStyle,
-
+        states.provincesLayer = L.geoJSON(data, {
+            style: styles.province,
             onEachFeature: onEachProvince
-
-        }).addTo(map);
-
-        map.fitBounds(provincesLayer.getBounds());
-
+        }).addTo(map); 
+        states.nationalBounds = states.provincesLayer.getBounds();
+        map.fitBounds(states.nationalBounds);
+        map.setMaxBounds(states.nationalBounds);
+        
+        const baseZoom = map.getBoundsZoom(states.nationalBounds);
+        map.setMinZoom(baseZoom);
+        map.setMaxZoom(mapConfig.maxZoomForCountry);
     });
 
-function provinceStyle(feature){
+fetch('../../data/counties.geojson')
+    .then(res => res.json())
+    .then(data => {
+        states.countyDataCache = data;
+        states.countiesByProvince = {};
 
-    return {
-        color: "#ffffff",
-        weight: 2,
-        fillColor: "#2E8B57",
-        fillOpacity: 0.8
-    }
+        for (const feature of data.features) {
+        const key = feature.properties.shapeISO;
 
-}
-
-function onEachProvince(feature, layer){
-
-    layer.bindTooltip(`
-        <b>${feature.properties.name}</b><br>
-        تعداد رستوران: 0
-    `);
-
-    layer.on({
-
-        mouseover: function(e){
-
-            e.target.setStyle({
-                fillColor:"#ff9800",
-                fillOpacity:1
-            });
-
-        },
-
-        mouseout: function(e){
-
-            provincesLayer.resetStyle(e.target);
-
+        if (!states.countiesByProvince[key]) {
+         states.countiesByProvince[key] = [];
         }
 
+        states.countiesByProvince[key].push(feature);
+        }
+        states.countyLayer = L.geoJSON(null, { 
+            style: styles.county,
+            onEachFeature: onEachCounty,
+            filter: (feature) => {
+                if (!states.activeProvinceName) return false; 
+                return feature.properties.shapeISO === states.activeProvinceName;
+            }
+        });
     });
-
-}

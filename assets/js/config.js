@@ -1,0 +1,23 @@
+export let states = {
+    provincesLayer: null,
+    countyLayer: null,
+    countiesByProvince: {},
+    activeProvinceName : null, 
+    countyDataCache : null,
+    nationalBounds : null,
+    dynamicZoomThreshold : null,
+}
+
+export const mapConfig = {
+    center: [32.4279, 53.6880],
+    maxZoomForCountry: 7, 
+    maxZoomForProvince: 11
+};
+
+export const styles = {
+    province: { color: "#ffffff", weight: 2, fillColor: "#2E8B57", fillOpacity: 0.8 },
+    provinceHover: { fillColor: "#ff9800", fillOpacity: 1, sticky: true },
+    
+    county: { color: '#7f8c8d', weight: 1, dashArray: '4', fillColor: '#3498db', fillOpacity: 0.4 },
+    countyHover: { fillColor: "#e74c3c", fillOpacity: 0.9, sticky: true }
+};
