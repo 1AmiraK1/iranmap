@@ -14,3 +14,7 @@ body{
 .map-tooltip {
     pointer-events: none; 
 }
+
+:focus {
+    outline: none;
+}

@@ -38,9 +38,6 @@ fetch('../../data/counties.geojson')
         states.countyLayer = L.geoJSON(null, { 
             style: styles.county,
             onEachFeature: onEachCounty,
-            filter: (feature) => {
-                if (!states.activeProvinceName) return false; 
-                return feature.properties.shapeISO === states.activeProvinceName;
-            }
         });
+        map.addLayer(states.countyLayer);
     });

@@ -24,9 +24,8 @@ export function onEachProvince(feature, layer) {
                 };
 
                 states.countyLayer.addData(filteredCounties);
-                
-                map.addLayer(states.countyLayer);
             }
+            
             const provinceBounds = e.target.getBounds();
             map.setMaxZoom(mapConfig.maxZoomForProvince); 
             map.fitBounds(provinceBounds, {
