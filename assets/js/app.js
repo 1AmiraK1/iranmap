@@ -3,6 +3,20 @@ import { states, mapConfig, styles } from './config.js';
 import { onEachProvince } from './province.js';
 import { onEachCounty } from './county.js';
 
+map.createPane('seas');
+map.getPane('seas').style.zIndex = 300;
+
+map.createPane('provinces');
+map.getPane('provinces').style.zIndex = 400;
+
+fetch('../../data/seas.geojson')
+    .then(res => res.json())
+    .then(data => {
+        states.seaLayer = L.geoJSON(data, {
+            pane: 'seas',
+            style: styles.sea
+        }).addTo(map);
+    });
 
 fetch('../../data/provinces.geojson')
     .then(res => res.json())

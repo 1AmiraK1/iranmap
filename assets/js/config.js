@@ -1,6 +1,7 @@
 export let states = {
     provincesLayer: null,
     countyLayer: null,
+    seaLayer: null,
     countiesByProvince: {},
     activeProvinceName : null, 
     countyDataCache : null,
@@ -15,9 +16,11 @@ export const mapConfig = {
 };
 
 export const styles = {
-    province: { color: "#ffffff", weight: 2, fillColor: "#2E8B57", fillOpacity: 0.8 },
+    province: { color: "#ffffff", weight: 1, fillColor: "#2E8B57", fillOpacity: 1 },
     provinceHover: { fillColor: "#ff9800", fillOpacity: 1, sticky: true },
     
     county: { color: '#7f8c8d', weight: 1, dashArray: '4', fillColor: '#3498db', fillOpacity: 0.4 },
-    countyHover: { fillColor: "#e74c3c", fillOpacity: 0.9, sticky: true }
+    countyHover: { fillColor: "#e74c3c", fillOpacity: 0.9, sticky: true },
+
+    sea: {color: '#999', weight: 1, fillColor: '#1989ec',fillOpacity: 1}
 };
