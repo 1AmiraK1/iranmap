@@ -9,7 +9,7 @@ map.getPane('seas').style.zIndex = 300;
 map.createPane('provinces');
 map.getPane('provinces').style.zIndex = 400;
 
-fetch('../../data/seas.geojson')
+fetch('data/seas.geojson')
     .then(res => res.json())
     .then(data => {
         states.seaLayer = L.geoJSON(data, {
@@ -18,7 +18,7 @@ fetch('../../data/seas.geojson')
         }).addTo(map);
     });
 
-fetch('../../data/provinces.geojson')
+fetch('data/provinces.geojson')
     .then(res => res.json())
     .then(data => {
         states.provincesLayer = L.geoJSON(data, {
@@ -34,7 +34,7 @@ fetch('../../data/provinces.geojson')
         map.setMaxZoom(mapConfig.maxZoomForCountry);
     });
 
-fetch('../../data/counties.geojson')
+fetch('data/counties.geojson')
     .then(res => res.json())
     .then(data => {
         states.countyDataCache = data;

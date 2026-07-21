@@ -1,3 +1,14 @@
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url("../font/Vazirmatn[wght].woff2") format('woff2 supports variations'),
+       url("../font/Vazirmatn[wght].woff2") format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+*{
+    font-family: 'Vazirmatn';
+}
 html,
 body{
     margin:0;
@@ -17,4 +28,32 @@ body{
 
 :focus {
     outline: none;
+}
+
+.map-controls{
+    display: flex;
+    flex-direction: column;
+    position:absolute;
+    right:20px;
+    top:50%;
+    transform:translateX(-50%);
+    z-index:1000;
+    gap:12px;
+}
+
+.svg-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 5vh;
+    gap: 12px;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 10px;
+    border: none;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    cursor: pointer;
+}
+& img{
+    height: 80%;
 }

@@ -12,8 +12,9 @@ export function onEachProvince(feature, layer) {
         mouseout: (e) => states.provincesLayer.resetStyle(e.target),
         click: (e) => {
             states.activeProvinceName = feature.properties.shapeISO;
-            
+            document.getElementById("back").style.display = "flex";
             if (states.provincesLayer) map.removeLayer(states.provincesLayer);
+            if (states.seaLayer) map.removeLayer(states.seaLayer);
             
             if (states.countyLayer && states.countyDataCache) {
                 states.countyLayer.clearLayers();
