@@ -9,49 +9,50 @@ map.getPane('seas').style.zIndex = 300;
 map.createPane('provinces');
 map.getPane('provinces').style.zIndex = 400;
 
-fetch('data/seas.geojson')
-    .then(res => res.json())
-    .then(data => {
-        states.seaLayer = L.geoJSON(data, {
-            pane: 'seas',
-            style: styles.sea
-        }).addTo(map);
-    });
+Promise.all([
+    fetch('data/seas.geojson').then(res => res.json()),
+    fetch('data/provinces.geojson').then(res => res.json()),
+    fetch('data/counties.geojson').then(res => res.json())
+]).then(([seasData, provincesData, countiesData]) => {
+    
+    states.seaLayer = L.geoJSON(seasData, {
+        pane: 'seas',
+        style: styles.sea
+    }).addTo(map);
 
-fetch('data/provinces.geojson')
-    .then(res => res.json())
-    .then(data => {
-        states.provincesLayer = L.geoJSON(data, {
-            style: styles.province,
-            onEachFeature: onEachProvince
-        }).addTo(map); 
-        states.nationalBounds = states.provincesLayer.getBounds();
-        map.fitBounds(states.nationalBounds);
-        map.setMaxBounds(states.nationalBounds);
-        
-        const baseZoom = map.getBoundsZoom(states.nationalBounds);
-        map.setMinZoom(baseZoom);
-        map.setMaxZoom(mapConfig.maxZoomForCountry);
-    });
+    states.provincesLayer = L.geoJSON(provincesData, {
+        pane: 'provinces',
+        style: styles.province,
+        onEachFeature: onEachProvince
+    }).addTo(map);
 
-fetch('data/counties.geojson')
-    .then(res => res.json())
-    .then(data => {
-        states.countyDataCache = data;
-        states.countiesByProvince = {};
+    states.countyDataCache = countiesData;
+    states.countiesByProvince = {};
 
-        for (const feature of data.features) {
+    for (const feature of countiesData.features) {
         const key = feature.properties.shapeISO;
-
         if (!states.countiesByProvince[key]) {
-         states.countiesByProvince[key] = [];
+            states.countiesByProvince[key] = [];
         }
-
         states.countiesByProvince[key].push(feature);
-        }
-        states.countyLayer = L.geoJSON(null, { 
-            style: styles.county,
-            onEachFeature: onEachCounty,
-        });
-        map.addLayer(states.countyLayer);
+    }
+    
+    states.countyLayer = L.geoJSON(null, { 
+        style: styles.county,
+        onEachFeature: onEachCounty,
     });
+    map.addLayer(states.countyLayer);
+    const provincesBounds = states.provincesLayer.getBounds();
+
+    const seasBounds = states.seaLayer.getBounds();
+    states.nationalBounds = provincesBounds.extend(seasBounds);
+    map.fitBounds(states.nationalBounds);
+    map.setMaxBounds(states.nationalBounds);
+    
+    const baseZoom = map.getBoundsZoom(states.nationalBounds);
+    map.setMinZoom(baseZoom);
+    map.setMaxZoom(mapConfig.maxZoomForCountry);
+
+}).catch(error => {
+    console.error("خطا در بارگذاری فایل‌های GeoJSON:", error);
+});

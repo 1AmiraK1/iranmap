@@ -1,59 +1,110 @@
 @font-face {
-  font-family: 'Vazirmatn';
-  src: url("../font/Vazirmatn[wght].woff2") format('woff2 supports variations'),
-       url("../font/Vazirmatn[wght].woff2") format('woff2-variations');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Vazirmatn';
+    src: url("../font/Vazirmatn[wght].woff2") format('woff2 supports variations'),
+        url("../font/Vazirmatn[wght].woff2") format('woff2-variations');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
 }
-*{
+
+* {
     font-family: 'Vazirmatn';
 }
+
 html,
-body{
-    margin:0;
-    padding:0;
-    width:100%;
-    height:100%;
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
 }
 
-#map{
-    width:100%;
-    height:100vh;
-}
-
-.map-tooltip {
-    pointer-events: none; 
+#map {
+    width: 100%;
+    height: 100vh;
 }
 
 :focus {
     outline: none;
 }
 
-.map-controls{
+.map-controls {
     display: flex;
     flex-direction: column;
-    position:absolute;
-    right:20px;
-    top:50%;
-    transform:translateX(-50%);
-    z-index:1000;
-    gap:12px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    gap: 12px;
 }
 
-.svg-icon{
+.map-btn {
     display: flex;
+    position: relative;
+    cursor: pointer;
     align-items: center;
     justify-content: center;
-    height: 5vh;
+    height: 50px;
+    width: 50px;
     gap: 12px;
-    background-color: white;
-    border-radius: 1rem;
+    border-radius: 10px;
     padding: 10px;
     border: none;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    cursor: pointer;
+    background-color: white;
 }
-& img{
+
+& img {
     height: 80%;
+}
+
+.map-btn::after {
+    content: attr(data-title);
+    position: absolute;
+    right: 120%;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.map-btn:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+& img {
+    height: 100%;
+}
+
+@media (max-width: 768px) {
+    .map-controls {
+        top: auto;
+        bottom: 8vh;
+        right: 50%;
+        transform: translateX(50%);
+        flex-direction: row;
+    }
+
+    .map-btn {
+        min-width: 38px;
+        min-height: 38px;
+        font-size: 14px;
+        border-radius: 50%;
+    }
+
+    .map-btn::after {
+        right: unset;
+        top: 0;
+        transform: translateY(-125%);
+    }
 }
