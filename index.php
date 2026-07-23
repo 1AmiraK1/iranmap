@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" href="assets/leaflet/leaflet.css">
 
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="src/css/style.css">
 
 </head>
 
@@ -25,7 +25,7 @@
 </div>
 </div>
 <script src="assets/leaflet/leaflet.js"></script>
-<script type="module" src="assets/js/app.js"></script>
+<script type="module" src="src/js/app.js"></script>
 
 </body>
 

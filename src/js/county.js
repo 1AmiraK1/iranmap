@@ -1,4 +1,3 @@
-import { map } from './map.js';
 import { states, mapConfig, styles } from './config.js';
 import { countyTooltipTemplate } from './templates.js'; 
 

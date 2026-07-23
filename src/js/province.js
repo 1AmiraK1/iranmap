@@ -1,5 +1,6 @@
 import { map } from './map.js';
 import { states, mapConfig, styles } from './config.js';
+import { UI } from './ui.js';
 import { provinceTooltipTemplate } from './templates.js';
 
 export function onEachProvince(feature, layer) {
@@ -17,7 +18,7 @@ export function onEachProvince(feature, layer) {
         click: (e) => {
             states.provincesLayer.resetStyle(e.target)
             states.activeProvinceName = feature.properties.shapeISO;
-            document.getElementById("back").style.display = "flex";
+            UI.toggleBackButton(true);
             map.getPane('provinces').style.display = 'none';
             map.getPane('seas').style.display = 'none';
 
