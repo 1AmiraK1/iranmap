@@ -10,7 +10,15 @@ map.getPane('seas').style.zIndex = 300;
 map.createPane('provinces');
 map.getPane('provinces').style.zIndex = 400;
 
+map.createPane('counties');
+map.getPane('counties').style.zIndex = 450;
+
 loadMapData().then(data => {
+    UI.loadMapDataTimeout();
+    if (!data.provincesData) {
+        UI.showError('بارگذاری نقشه با خطا مواجه شد. لطفاً صفحه را رفرش کنید.');
+        return;
+    }
     initLayers(map, data);
 });
 
@@ -19,24 +27,35 @@ UI.setupEventListeners({
     onZoomOut: mapHandlers.zoomOut,
     onFitBounds: mapHandlers.fitBounds,
     onFullscreen: UI.toggleFullscreen,
-    
+
     onBack: () => {
-        UI.toggleBackButton(false);
-        UI.fadeMap(() => {
-            mapHandlers.resetToNationalBounds();
-        });
+        if (states.maskLayer && map.hasLayer(states.maskLayer)) {
+            UI.fadeMap(() => {
+                mapHandlers.resetToProvinceBounds();
+            });
+        } else {
+            UI.toggleBackButton(false);
+            UI.fadeMap(() => {
+                mapHandlers.resetToNationalBounds();
+            });
+        }
     },
 
     onFullscreenChange: (isFullscreen) => {
         const title = isFullscreen ? "خروج از تمام صفحه" : "تمام صفحه";
         UI.updateFullscreenTooltip(title);
-        
-        setTimeout(() => {
-            const currentBounds = states.activeProvinceName && states.countyLayer && states.countyLayer.getLayers().length > 0
-                ? states.countyLayer.getBounds() 
-                : states.nationalBounds;
-                
+
+        UI.whenMapSizeStable(() => {
+            let currentBounds;
+            if (states.activeCountyName && states.activeCountyBounds) {
+                currentBounds = states.activeCountyBounds;
+            } else if (states.activeProvinceCode && states.countyLayer && states.countyLayer.getLayers().length > 0) {
+                currentBounds = states.countyLayer.getBounds();
+            } else {
+                currentBounds = states.nationalBounds;
+            }
+
             mapHandlers.adjustMapAfterFullscreen(currentBounds);
-        }, 200);
+        });
     }
 });

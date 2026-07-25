@@ -5,24 +5,34 @@ const DOM = {
     fitBoundsBtn: document.getElementById("fitBoundsBtn"),
     fullscreenBtn: document.getElementById("fullscreenBtn"),
     mapContainer: document.getElementById("map"),
-    mapWrapper: document.getElementById("map-wrapper")
+    mapWrapper: document.getElementById("map-wrapper"),
+    globalLoader: document.getElementById('global-loader')
 };
 
 export const UI = {
+    loadMapDataTimeout: () => {
+        if (DOM.globalLoader.style.display == 'none') {
+            setTimeout(() => DOM.globalLoader.style.display = 'flex', 500)
+        } else if (DOM.globalLoader.style.display = 'flex') {
+            setTimeout(() => DOM.globalLoader.style.display = 'none', 500)
+        }
+
+    },
+
     toggleBackButton: (isVisible) => {
         DOM.backBtn.style.display = isVisible ? "flex" : "none";
     },
-    
+
     fadeMap: (callback) => {
         DOM.mapContainer.style.opacity = '0';
         DOM.mapContainer.style.transition = 'opacity 0.4s ease';
-        
+
         setTimeout(() => {
-            if(callback) callback();
+            if (callback) callback();
             DOM.mapContainer.style.opacity = '1';
-        }, 200);
+        }, 400);
     },
-    
+
     toggleFullscreen: () => {
         if (!document.fullscreenElement) {
             if (DOM.mapWrapper.requestFullscreen) DOM.mapWrapper.requestFullscreen();
@@ -54,5 +64,39 @@ export const UI = {
         document.addEventListener("fullscreenchange", onFullscreenChange);
         document.addEventListener("webkitfullscreenchange", onFullscreenChange);
         document.addEventListener("msfullscreenchange", onFullscreenChange);
+    },
+
+    whenMapSizeStable: (callback, { debounceMs = 100, maxWaitMs = 1000 } = {}) => {
+        let settleTimeout;
+        let finished = false;
+
+        const finish = () => {
+            if (finished) return;
+            finished = true;
+            clearTimeout(settleTimeout);
+            clearTimeout(safetyTimeout);
+            observer.disconnect();
+            callback();
+        };
+
+        const observer = new ResizeObserver(() => {
+            clearTimeout(settleTimeout);
+            settleTimeout = setTimeout(finish, debounceMs);
+        });
+        observer.observe(DOM.mapContainer);
+
+        const safetyTimeout = setTimeout(finish, maxWaitMs);
+    },
+
+    showError: (message) => {
+        let banner = document.getElementById('map-error-banner');
+        if (!banner) {
+            banner = document.createElement('div');
+            banner.id = 'map-error-banner';
+            banner.className = 'map-error-banner';
+            document.body.appendChild(banner);
+        }
+        banner.textContent = message;
+        banner.style.display = 'block';
     }
 };
