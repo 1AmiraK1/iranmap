@@ -6,7 +6,7 @@ $y = isset($_GET['y']) ? intval($_GET['y']) : 0;
 $province = isset($_GET['province']) ? $_GET['province'] : 'IR-30';
 $province = preg_replace('/[^a-zA-Z0-9_-]/', '', $province);
 
-$db_path = __DIR__ . "/assets/data/{$province}.mbtiles";
+$db_path = __DIR__ . "/assets/tiles/{$province}.mbtiles";
 
 if (!file_exists($db_path)) {
     header("HTTP/1.0 404 Not Found");
