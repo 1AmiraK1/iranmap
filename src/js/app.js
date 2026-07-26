@@ -13,6 +13,9 @@ map.getPane('provinces').style.zIndex = 400;
 map.createPane('counties');
 map.getPane('counties').style.zIndex = 450;
 
+map.createPane('points');
+map.getPane('points').style.zIndex = 500;
+
 loadMapData().then(data => {
     UI.loadMapDataTimeout();
     if (!data.provincesData) {

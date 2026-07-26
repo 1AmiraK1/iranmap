@@ -3,6 +3,7 @@ export let states = {
     countyLayer: null,
     seaLayer: null,
     cityTileLayer: null,
+    pointLayer:null,
     maskLayer: null,
     countiesByProvince: {},
     activeProvinceCode: null,
@@ -31,7 +32,8 @@ export const styles = {
     county: { color: getCssVar('--county-border'), weight: 1, dashArray: '4', fillColor: getCssVar('--county-fill'), fillOpacity: 0.4, noClip: true },
     countyHover: { fillColor: getCssVar('--county-hover'), fillOpacity: 0.9, sticky: true },
     sea: { color: getCssVar('--sea-border'), weight: 1, fillColor: getCssVar('--sea-fill'), fillOpacity: 1, noClip: true },
-    mask: { fillColor: '#000000', fillOpacity: 0.5, color: '#ff0000', weight: 2, interactive: false }
+    mask: { fillColor: '#000000', fillOpacity: 0.5, color: '#ff0000', weight: 2, interactive: false },
+    point:{radius: 7, weight: 2, color: '#ffffff', fillColor: getCssVar('--poi-fill') || '#e63946', fillOpacity: 1}
 };
 
 export const computeMaxZoomFromMin = (minZoom, baseMaxZoom, buffer = 3) => {
