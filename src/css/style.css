@@ -1,7 +1,8 @@
 @font-face {
     font-family: 'Vazirmatn';
     src: url("../../assets/font/Vazirmatn[wght].woff2") format('woff2 supports variations'),
-        url("../../assets/font/Vazirmatn[wght].woff2") format('woff2-variations');
+        url("../../assets/font/Vazirmatn[wght].woff2") format('woff2-variations'),
+        url("../../assets/font/Vazirmatn[wght].woff2") format('woff2');;
     font-weight: 100 900;
     font-style: normal;
     font-display: swap;
@@ -68,7 +69,7 @@ body {
     background-color: white;
 }
 
-& img {
+.map-btn img {
     height: 80%;
 }
 
@@ -95,7 +96,7 @@ body {
     visibility: visible;
 }
 
-& img {
+.map-btn:hover::after img {
     height: 100%;
 }
 
