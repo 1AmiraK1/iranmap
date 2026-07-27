@@ -4,6 +4,7 @@ const DOM = {
     backBtn: document.getElementById("back"),
     fitBoundsBtn: document.getElementById("fitBoundsBtn"),
     fullscreenBtn: document.getElementById("fullscreenBtn"),
+    fullscreenIcon: document.getElementById("fs-icon"),
     mapContainer: document.getElementById("map"),
     mapWrapper: document.getElementById("map-wrapper"),
     globalLoader: document.getElementById('global-loader')
@@ -47,6 +48,10 @@ export const UI = {
 
     updateFullscreenTooltip: (title) => {
         DOM.fullscreenBtn.setAttribute("data-title", title);
+    },
+
+    changeFullscreenIcon:(iconPath)=>{
+        DOM.fullscreenIcon.setAttribute("src", iconPath);
     },
 
     setupEventListeners: (handlers) => {

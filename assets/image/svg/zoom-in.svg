@@ -1,10 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="style=doutone">
-<g id="add">
-<path id="vector (Stroke)" fill-rule="evenodd" clip-rule="evenodd" d="M11.9988 5.09338C12.413 5.09338 12.7488 5.42916 12.7488 5.84338L12.7487 18.1595C12.7487 18.5737 12.4129 18.9095 11.9987 18.9095C11.5845 18.9095 11.2487 18.5737 11.2487 18.1595L11.2488 5.84337C11.2488 5.42916 11.5846 5.09337 11.9988 5.09338Z" fill="#BFBFBF"/>
-<path id="vector (Stroke)_2" fill-rule="evenodd" clip-rule="evenodd" d="M18.9069 12.0015C18.9069 12.4157 18.5711 12.7515 18.1569 12.7515L5.84071 12.7514C5.4265 12.7514 5.09072 12.4156 5.09072 12.0014C5.09072 11.5872 5.42651 11.2514 5.84072 11.2514L18.1569 11.2515C18.5711 11.2515 18.9069 11.5873 18.9069 12.0015Z" fill="#000000"/>
-</g>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128">
+    <path style="stroke:none;fill-rule:evenodd;fill:#000;fill-opacity:1" d="M52 96c24.3 0 44-19.7 44-44S76.3 8 52 8 8 27.7 8 52s19.7 44 44 44Zm52-44c0 28.719-23.281 52-52 52S0 80.719 0 52 23.281 0 52 0s52 23.281 52 52Zm0 0"/>
+    <path style="stroke:none;fill-rule:nonzero;fill:#000;fill-opacity:1" d="M82.754 93.938c.238.32.492.62.781.917l30.8 30.801c3.126 3.125 8.192 3.13 11.317.004 3.125-3.125 3.13-8.191.004-11.316l-30.8-30.801a8.53 8.53 0 0 0-.918-.8 52.35 52.35 0 0 1-11.184 11.202Zm0 0"/>
+    <path style="stroke:none;fill-rule:evenodd;fill:#000;fill-opacity:1" d="M52 24c2.21 0 4 1.79 4 4v20h20c2.21 0 4 1.79 4 4s-1.79 4-4 4H56v20c0 2.21-1.79 4-4 4s-4-1.79-4-4V56H28c-2.21 0-4-1.79-4-4s1.79-4 4-4h20V28c0-2.21 1.79-4 4-4Zm0 0"/>
 </svg>
