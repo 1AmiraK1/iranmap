@@ -2,7 +2,7 @@ import { map, mapHandlers } from './map.js';
 import { loadMapData } from './data.js';
 import { initLayers } from './layers.js';
 import { UI } from './ui.js';
-import { states } from './config.js';
+import { states, setDisabledConfig } from './config.js';
 
 map.createPane('seas');
 map.getPane('seas').style.zIndex = 300;
@@ -22,6 +22,7 @@ loadMapData().then(data => {
         UI.showError('بارگذاری نقشه با خطا مواجه شد. لطفاً صفحه را رفرش کنید.');
         return;
     }
+    setDisabledConfig(data.disabledData);
     initLayers(map, data);
 });
 

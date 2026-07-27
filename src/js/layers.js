@@ -1,4 +1,4 @@
-import { states, mapConfig, styles } from './config.js';
+import { states, mapConfig, styles, isProvinceDisabled, isCountyDisabled } from './config.js';
 import { onEachProvince } from './province.js';
 import { onEachCounty } from './county.js';
 
@@ -13,7 +13,7 @@ export const initLayers = (map, { seasData, provincesData, countiesData }) => {
     if (provincesData) {
         states.provincesLayer = L.geoJSON(provincesData, {
             pane: 'provinces',
-            style: styles.province,
+            style: (feature)=> isProvinceDisabled(feature)? styles.provinceDisabled: styles.province,
             onEachFeature: onEachProvince
         }).addTo(map);
 
@@ -31,7 +31,7 @@ export const initLayers = (map, { seasData, provincesData, countiesData }) => {
 
     states.countyLayer = L.geoJSON(null, {
         pane: 'counties',
-        style: styles.county,
+        style: (feature)=> isCountyDisabled(feature)? styles.countyDisabled: styles.county,
         onEachFeature: onEachCounty,
     });
     map.addLayer(states.countyLayer);

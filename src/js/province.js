@@ -1,9 +1,13 @@
 import { map } from './map.js';
-import { states, mapConfig, styles, computeMaxZoomFromMin } from './config.js';
+import { states, mapConfig, styles, computeMaxZoomFromMin, isProvinceDisabled } from './config.js';
 import { UI } from './ui.js';
 import { provinceTooltipTemplate } from './templates.js';
 
 export function onEachProvince(feature, layer) {
+    if (isProvinceDisabled(feature)) {
+        return;
+    }
+
     const tooltipHTML = provinceTooltipTemplate(feature.properties);
     layer.bindTooltip(tooltipHTML, {
         sticky: true,

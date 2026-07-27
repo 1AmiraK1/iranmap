@@ -1,4 +1,4 @@
-import { states, mapConfig, styles } from './config.js';
+import { states, mapConfig, styles, isCountyDisabled } from './config.js';
 import { countyTooltipTemplate } from './templates.js';
 import { map } from './map.js';
 import {renderCountyPoints} from './point.js';
@@ -28,6 +28,10 @@ function createMaskFeature(feature) {
 }
 
 export function onEachCounty(feature, layer) {
+    if (isCountyDisabled(feature)) {
+        return;
+    }
+
     const tooltipHTML = countyTooltipTemplate(feature.properties);
     layer.bindTooltip(tooltipHTML, {
         sticky: true,
