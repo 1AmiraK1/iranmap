@@ -14,7 +14,7 @@ const DOM = {
 export const UI = {
     loadMapDataTimeout: () => {
         setTimeout(() => {
-            (!DOM.globalLoader.style.visibility) ? DOM.globalLoader.style.visibility = 'hidden' : DOM.globalLoader.style.visibility ='visible';
+            DOM.globalLoader.style.visibility = 'hidden';
         }, 500);
     },
 
@@ -48,7 +48,7 @@ export const UI = {
         DOM.fullscreenBtn.setAttribute("data-title", title);
     },
 
-    changeFullscreenIcon:(iconPath)=>{
+    changeFullscreenIcon: (iconPath) => {
         DOM.fullscreenIcon.setAttribute("src", iconPath);
     },
 
@@ -102,13 +102,14 @@ export const UI = {
         banner.textContent = message;
         banner.style.display = 'block';
     },
-
     showCountyLabel: (name) => {
+        if (!DOM.activeCountyLabel) return;
         DOM.activeCountyLabel.textContent = name;
         DOM.activeCountyLabel.style.display = 'block';
     },
 
     hideCountyLabel: () => {
+        if (!DOM.activeCountyLabel) return;
         DOM.activeCountyLabel.style.display = 'none';
     },
 };
