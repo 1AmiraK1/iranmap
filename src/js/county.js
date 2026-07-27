@@ -2,6 +2,7 @@ import { states, mapConfig, styles, isCountyDisabled } from './config.js';
 import { countyTooltipTemplate } from './templates.js';
 import { map } from './map.js';
 import {renderCountyPoints} from './point.js';
+import { UI } from './ui.js'; 
 
 function createMaskFeature(feature) {
     const outerRing = [
@@ -47,7 +48,7 @@ export function onEachCounty(feature, layer) {
             states.countyLayer.resetStyle(e.target);
             states.activeCountyName = feature.properties.shapeName;
             states.activeCountyBounds = e.target.getBounds();
-
+            UI.showCountyLabel(feature.properties.shapeName);
             renderCountyPoints(map, states, feature.properties.shapeName);
 
             map.removeLayer(states.countyLayer);

@@ -7,17 +7,15 @@ const DOM = {
     fullscreenIcon: document.getElementById("fs-icon"),
     mapContainer: document.getElementById("map"),
     mapWrapper: document.getElementById("map-wrapper"),
-    globalLoader: document.getElementById('global-loader')
+    globalLoader: document.getElementById('global-loader'),
+    activeCountyLabel: document.getElementById("activeCountyLabel")
 };
 
 export const UI = {
     loadMapDataTimeout: () => {
-        if (DOM.globalLoader.style.display == 'none') {
-            setTimeout(() => DOM.globalLoader.style.display = 'flex', 500)
-        } else if (DOM.globalLoader.style.display = 'flex') {
-            setTimeout(() => DOM.globalLoader.style.display = 'none', 500)
-        }
-
+        setTimeout(() => {
+            (!DOM.globalLoader.style.visibility) ? DOM.globalLoader.style.visibility = 'hidden' : DOM.globalLoader.style.visibility ='visible';
+        }, 500);
     },
 
     toggleBackButton: (isVisible) => {
@@ -103,5 +101,14 @@ export const UI = {
         }
         banner.textContent = message;
         banner.style.display = 'block';
-    }
+    },
+
+    showCountyLabel: (name) => {
+        DOM.activeCountyLabel.textContent = name;
+        DOM.activeCountyLabel.style.display = 'block';
+    },
+
+    hideCountyLabel: () => {
+        DOM.activeCountyLabel.style.display = 'none';
+    },
 };

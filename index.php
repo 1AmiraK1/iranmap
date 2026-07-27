@@ -24,6 +24,7 @@
     <button id="fullscreenBtn" class="map-btn svg-icon" data-title="تمام صفحه"><img id="fs-icon" src="assets/image/svg/fullscreen.svg" alt="fullscreen"></button>
     <button id="back" class="map-btn svg-icon" data-title="بازگشت"><img src="assets/image/svg/back.svg" alt="back"></button>
 </div>
+<div id="activeCountyLabel" class="active-county-label"></div>
 </div>
 <script src="assets/leaflet/leaflet.js"></script>
 <script type="module" src="src/js/app.js"></script>

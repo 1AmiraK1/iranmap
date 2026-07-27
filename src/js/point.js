@@ -27,12 +27,12 @@ export function renderCountyPoints(map, states, countyName){
                 .bindPopup(p.name)
     );
 
-        states.pointlayer = L.layerGroup(markers).addTo(map);
+        states.pointLayer = L.layerGroup(markers).addTo(map);
 }
 
 export function clearCountyPoints(map, states){
-    if (states.pointlayer && map.hasLayer(states.pointlayer)) {
-        map.removeLayer(states.pointlayer);
+    if (states.pointLayer && map.hasLayer(states.pointLayer)) {
+        map.removeLayer(states.pointLayer);
     }
-    states.pointlayer = null;
+    states.pointLayer = null;
 }

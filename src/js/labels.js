@@ -7,7 +7,7 @@ const FONT_WEIGHT = 700;
 const measureCanvas = document.createElement('canvas');
 const measureCtx = measureCanvas.getContext('2d');
 
-const escapeHtml = (str) =>
+export const escapeHtml = (str) =>
     String(str).replace(/[&<>"']/g, (ch) => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     }[ch]));
@@ -87,14 +87,11 @@ export function fitLabel(map, marker) {
     const { width, height } = getPixelSize(map, marker._boundPolygon.getBounds());
     const fontFamily = getComputedStyle(document.body).fontFamily || 'Tahoma, sans-serif';
 
-    const fontSize = bestFontSize(marker._labelText, width * WIDTH_RATIO, height * HEIGHT_RATIO, fontFamily);
+    let fontSize = bestFontSize(marker._labelText, width * WIDTH_RATIO, height * HEIGHT_RATIO, fontFamily);
+    if (fontSize < MIN_FONT_SIZE) fontSize = MIN_FONT_SIZE;
 
-    if (fontSize < MIN_FONT_SIZE) {
-        el.style.display = 'none';
-    } else {
-        el.style.display = 'flex';
-        span.style.fontSize = `${fontSize}px`;
-    }
+    el.style.display = 'flex';
+    span.style.fontSize = `${fontSize}px`;
 }
 
 export function createNameLabel(map, polygonLayer, name, className = '') {

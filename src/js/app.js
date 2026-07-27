@@ -32,6 +32,9 @@ loadMapData().then(data => {
         UI.showError('بارگذاری نقشه با خطا مواجه شد. لطفاً صفحه را رفرش کنید.');
         return;
     }
+    if (!data.seasData || !data.countiesData || !data.disabledData) {
+        console.warn('برخی داده‌های نقشه بارگذاری نشدند:', data);
+    }
     setDisabledConfig(data.disabledData);
     initLayers(map, data);
 });

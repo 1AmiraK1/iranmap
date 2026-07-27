@@ -19,6 +19,7 @@ export const initLayers = (map, { seasData, provincesData, countiesData }) => {
         }).addTo(map);
 
         states.provinceLabelsLayer = L.layerGroup();
+        states.countyLabelsLayer = L.layerGroup();
         states.provincesLayer.eachLayer((layer) => {
             const marker = createNameLabel(map, layer, layer.feature.properties.shapeName, 'province-name-label');
             states.provinceLabelsLayer.addLayer(marker);

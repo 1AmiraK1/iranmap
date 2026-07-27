@@ -1,5 +1,6 @@
 import { mapConfig, states, computeMaxZoomFromMin } from './config.js';
 import { clearCountyPoints } from './point.js';
+import { UI } from './ui.js';
 
 export const map = L.map('map', {
     zoomControl: false,
@@ -35,7 +36,17 @@ export const mapHandlers = {
     },
 
     resetToNationalBounds: () => {
+        UI.hideCountyLabel();
         if (states.countyLayer) states.countyLayer.clearLayers();
+        if (states.provinceLabelsLayer && !map.hasLayer(states.provinceLabelsLayer)) {
+            map.addLayer(states.provinceLabelsLayer);
+        }
+        if (states.countyLabelsLayer) {
+            states.countyLabelsLayer.clearLayers();
+            if (map.hasLayer(states.countyLabelsLayer)) {
+                map.removeLayer(states.countyLabelsLayer);
+            }
+        }
         if (states.maskLayer && map.hasLayer(states.maskLayer)) {
             map.removeLayer(states.maskLayer);
         }
@@ -64,6 +75,7 @@ export const mapHandlers = {
     },
 
     resetToProvinceBounds: () => {
+        UI.hideCountyLabel();
         if (states.maskLayer && map.hasLayer(states.maskLayer)) {
             map.removeLayer(states.maskLayer);
         }
@@ -75,6 +87,9 @@ export const mapHandlers = {
 
         if (states.countyLayer && !map.hasLayer(states.countyLayer)) {
             map.addLayer(states.countyLayer);
+        }
+        if (states.countyLabelsLayer && !map.hasLayer(states.countyLabelsLayer)) {
+            map.addLayer(states.countyLabelsLayer);
         }
 
         if (states.countyLayer) {
