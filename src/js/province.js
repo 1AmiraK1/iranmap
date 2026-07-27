@@ -2,6 +2,7 @@ import { map } from './map.js';
 import { states, mapConfig, styles, computeMaxZoomFromMin, isProvinceDisabled } from './config.js';
 import { UI } from './ui.js';
 import { provinceTooltipTemplate } from './templates.js';
+import { createNameLabel } from './labels.js';
 
 export function onEachProvince(feature, layer) {
     if (isProvinceDisabled(feature)) {
@@ -27,6 +28,10 @@ export function onEachProvince(feature, layer) {
             map.getPane('provinces').style.display = 'none';
             map.getPane('seas').style.display = 'none';
 
+            if (states.provinceLabelsLayer && map.hasLayer(states.provinceLabelsLayer)) {
+                map.removeLayer(states.provinceLabelsLayer);
+            }
+
             if (states.countyLayer && states.countyDataCache) {
                 states.countyLayer.clearLayers();
                 const filteredCounties = {
@@ -34,6 +39,17 @@ export function onEachProvince(feature, layer) {
                     features: states.countiesByProvince[states.activeProvinceCode] || []
                 };
                 states.countyLayer.addData(filteredCounties);
+            }
+
+            if (states.countyLabelsLayer) {
+                states.countyLabelsLayer.clearLayers();
+                states.countyLayer.eachLayer((layer) => {
+                    const marker = createNameLabel(map, layer, layer.feature.properties.shapeName, 'county-name-label');
+                    states.countyLabelsLayer.addLayer(marker);
+                });
+                if (!map.hasLayer(states.countyLabelsLayer)) {
+                    map.addLayer(states.countyLabelsLayer);
+                }
             }
 
             let targetBounds = states.countyLayer.getBounds();

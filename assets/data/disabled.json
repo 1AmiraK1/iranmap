@@ -1,6 +1,6 @@
 {
     "provinces": [
-        "IR-06"
+        ""
     ],
     "counties": [
         { "provinceCode": "IR-06", "name": "دشتستان" }

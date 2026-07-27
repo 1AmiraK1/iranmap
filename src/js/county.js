@@ -51,6 +51,9 @@ export function onEachCounty(feature, layer) {
             renderCountyPoints(map, states, feature.properties.shapeName);
 
             map.removeLayer(states.countyLayer);
+            if (states.countyLabelsLayer && map.hasLayer(states.countyLabelsLayer)) {
+                map.removeLayer(states.countyLabelsLayer);
+            }
             if (states.maskLayer && map.hasLayer(states.maskLayer)) {
                 map.removeLayer(states.maskLayer);
             }
@@ -81,6 +84,8 @@ export function onEachCounty(feature, layer) {
                 if (!states.cityTileLayer) {
                     states.cityTileLayer = L.tileLayer(tileUrl, {
                         maxZoom: mapConfig.maxZoomForCity,
+                        minNativeZoom: mapConfig.tileNativeZoom,
+                        maxNativeZoom: mapConfig.tileNativeZoom,
                         className: 'city-tiles'
                     });
                 } else {

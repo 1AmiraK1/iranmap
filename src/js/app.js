@@ -3,6 +3,7 @@ import { loadMapData } from './data.js';
 import { initLayers } from './layers.js';
 import { UI } from './ui.js';
 import { states, setDisabledConfig } from './config.js';
+import {refreshLabels} from './labels.js';
 
 map.createPane('seas');
 map.getPane('seas').style.zIndex = 300;
@@ -13,8 +14,17 @@ map.getPane('provinces').style.zIndex = 400;
 map.createPane('counties');
 map.getPane('counties').style.zIndex = 450;
 
+map.createPane('labels');
+map.getPane('labels').style.zIndex=470;
+map.getPane('labels').style.pointerEvents = 'none';
+
 map.createPane('points');
 map.getPane('points').style.zIndex = 500;
+
+map.on('zoomend', ()=>{
+    refreshLabels(map, states.provinceLabelsLayer);
+    refreshLabels(map, states.countyLabelsLayer);
+});
 
 loadMapData().then(data => {
     UI.loadMapDataTimeout();
