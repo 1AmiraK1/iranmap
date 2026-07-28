@@ -23,8 +23,8 @@
                 <div class="card-item">
                     <div class="card mb-3">
                         <div class="row g-0">
-                            <div class="col-md-3">
-                                <img src="assets/image/uploads/test.jpg" class="img-fluid rounded-start" alt="...">
+                            <div class="col-md-2">
+                                <img src="assets/image/uploads/test.jpg" class="img-fluid rounded-start h-100 object-fit-cover" alt="...">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
@@ -32,35 +32,9 @@
                                     <p class="card-text">آدرس: خراسان رضوی ، مشهد ، خیابان طبرسی</p>
                                     <p class="card-text rounded card-type bg-primary-subtle m-2 px-2 py-1">نوع: هتل</p>
                                     <p class="card-text"><small class="text-body-secondary">تلفن: 0553225752</small></p>
-
-
-                                    <div class="modal" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Modal title</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                        <h2 class="fs-5">Popover in a modal</h2>
-                                        <img src="assets/image/uploads/qr.png" alt="qrcode-address">
-                                        <hr>
-                                        <h2 class="fs-5">Tooltips in a modal</h2>
-                                        <p><a href="#" data-bs-toggle="tooltip" title="Tooltip">This link</a> and <a href="#" data-bs-toggle="tooltip" title="Tooltip">that link</a> have tooltips on hover.</p>
-                                    </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-
-
-
+                                    <button type="button" class="btn btn-outline-secondary btn-sm mt-2 d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#imageModal">
+                                        نمایش بارکد / تصویر
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +60,20 @@
             </div>
         </div>
     </div>
-
+    
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">تصویر</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <img src="assets/image/uploads/qr.png" alt="qrcode-address" class="img-fluid rounded shadow-sm">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/leaflet/leaflet.js"></script>
