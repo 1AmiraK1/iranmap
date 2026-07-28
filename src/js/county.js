@@ -45,6 +45,8 @@ export function onEachCounty(feature, layer) {
         },
         mouseout: (e) => states.countyLayer.resetStyle(e.target),
         click: (e) => {
+            UI.showTileLoader();
+
             states.countyLayer.resetStyle(e.target);
             states.activeCountyName = feature.properties.shapeName;
             states.activeCountyBounds = e.target.getBounds();
@@ -81,6 +83,7 @@ export function onEachCounty(feature, layer) {
                 const provinceCode = states.activeProvinceCode;
 
                 const tileUrl = `tile_server.php?z={z}&x={x}&y={y}&province=${encodeURIComponent(provinceCode)}`;
+                const targetCountyName = feature.properties.shapeName;
 
                 if (!states.cityTileLayer) {
                     states.cityTileLayer = L.tileLayer(tileUrl, {
@@ -90,9 +93,14 @@ export function onEachCounty(feature, layer) {
                         className: 'city-tiles'
                     });
                 } else {
+                    states.cityTileLayer.off('load');
                     states.cityTileLayer.setUrl(tileUrl);
                 }
 
+                states.cityTileLayer.once('load', () => {
+                    if (states.activeCountyName !== targetCountyName) return;
+                    UI.hideTileLoader();
+                });
 
                 if (!map.hasLayer(states.cityTileLayer)) {
                     map.addLayer(states.cityTileLayer);

@@ -1,8 +1,8 @@
-const MIN_FONT_SIZE = 9;   
+const MIN_FONT_SIZE = 5;   
 const MAX_FONT_SIZE = 46;  
-const WIDTH_RATIO = 0.7;   
+const WIDTH_RATIO = 0.5;   
 const HEIGHT_RATIO = 0.5; 
-const FONT_WEIGHT = 700;
+const FONT_WEIGHT = 400;
 
 const measureCanvas = document.createElement('canvas');
 const measureCtx = measureCanvas.getContext('2d');
@@ -11,32 +11,6 @@ export const escapeHtml = (str) =>
     String(str).replace(/[&<>"']/g, (ch) => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     }[ch]));
-
-function injectStylesOnce() {
-    if (document.getElementById('map-name-label-style')) return;
-    const style = document.createElement('style');
-    style.id = 'map-name-label-style';
-    style.textContent = `
-        .map-name-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            border: none;
-            pointer-events: none;
-            user-select: none;
-        }
-        .map-name-label span {
-            display: inline-block;
-            white-space: nowrap;
-            line-height: 1;
-            font-weight: ${FONT_WEIGHT};
-            color: rgba(0, 0, 0, 0.45);
-            text-shadow: 0 0 3px rgba(255, 255, 255, 0.75), 0 0 3px rgba(255, 255, 255, 0.75);
-        }
-    `;
-    document.head.appendChild(style);
-}
 
 function measureTextWidth(text, fontSize, fontFamily) {
     measureCtx.font = `${FONT_WEIGHT} ${fontSize}px ${fontFamily}`;
@@ -117,5 +91,3 @@ export function refreshLabels(map, labelLayerGroup) {
     if (!labelLayerGroup) return;
     labelLayerGroup.eachLayer((marker) => fitLabel(map, marker));
 }
-
-injectStylesOnce();

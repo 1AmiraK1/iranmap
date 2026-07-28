@@ -112,4 +112,33 @@ export const UI = {
         if (!DOM.activeCountyLabel) return;
         DOM.activeCountyLabel.style.display = 'none';
     },
+
+    showTileLoader: () => {
+        let overlay = document.getElementById('map-loading-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'map-loading-overlay';
+            overlay.className = 'map-loading-overlay';
+            const spinner = document.createElement('div');
+            spinner.className = 'map-loading-spinner';
+            overlay.appendChild(spinner);
+            DOM.mapWrapper.appendChild(overlay);
+        }
+        overlay.style.transition = 'none';
+        overlay.style.display = 'block';
+        overlay.style.opacity = '1';
+    },
+
+    hideTileLoader: () => {
+        const overlay = document.getElementById('map-loading-overlay');
+        if (!overlay || overlay.style.display === 'none') return;
+
+        overlay.style.transition = 'opacity 0.35s ease';
+        overlay.offsetHeight;
+        overlay.style.opacity = '0';
+
+        setTimeout(() => {
+            overlay.style.display = 'none';
+        }, 350);
+    },
 };

@@ -37,6 +37,13 @@ loadMapData().then(data => {
     }
     setDisabledConfig(data.disabledData);
     initLayers(map, data);
+    
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+            refreshLabels(map, states.provinceLabelsLayer);
+            refreshLabels(map, states.countyLabelsLayer);
+        });
+    }
 });
 
 UI.setupEventListeners({
