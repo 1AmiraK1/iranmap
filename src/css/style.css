@@ -30,8 +30,13 @@ body {
     width: 100%;
     height: 100%;
 }
+.list-section, .map-section{
+    width: 50%;
+}
 #map-wrapper{
     position: relative;
+    width: 100%;
+    height: 100vh;
 }
 #map {
     width: 100%;
@@ -212,4 +217,11 @@ body {
 }
 @keyframes city-tile-spin {
     to { transform: rotate(360deg); }
+}
+
+/* Cards */
+.card-type{
+    position: absolute;
+    top: 0;
+    left: 0;
 }
