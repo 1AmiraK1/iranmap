@@ -30,11 +30,17 @@
                                 <div class="card-body">
                                     <h5 class="card-title">نام : هتل آریا</h5>
                                     <p class="card-text">آدرس: خراسان رضوی ، مشهد ، خیابان طبرسی</p>
-                                    <p class="card-text rounded card-type bg-primary-subtle m-2 px-2 py-1">نوع: هتل</p>
+                                    <p class="card-text rounded bg-primary-subtle m-2 px-2 py-1" id="card-type">نوع: هتل</p>
                                     <p class="card-text"><small class="text-body-secondary">تلفن: 0553225752</small></p>
-                                    <button type="button" class="btn btn-outline-secondary btn-sm mt-2 d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#imageModal">
-                                        نمایش بارکد / تصویر
+                                    <div class="p-2" id="card-info">
+                                    <button type="button" class="btn btn-outline-primary px-2 py-1" id="card-qr" data-bs-toggle="modal" data-bs-target="#imageModal">
+                                        اطلاعات بیشتر
+                                </button>
+                                    <button type="button" class="btn btn-outline-dark px-2 py-1" id="card-qr" data-bs-toggle="modal" data-bs-target="#imageModal">
+                                        نمایش روی نقشه
                                     </button>
+                                    
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -62,14 +68,13 @@
     </div>
     
     <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="imageModalLabel">تصویر</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center p-4">
-                    <img src="assets/image/uploads/qr.png" alt="qrcode-address" class="img-fluid rounded shadow-sm">
+                <div class="modal-body text-center d-flex flex-column gap-2">
+                    <img src="assets/image/uploads/qr.png" alt="qrcode-address" class="img-fluid rounded shadow-lg">
+                    <button type="button" class="btn btn-outline-dark align-self-center btn-sm px-2 py-1" data-bs-dismiss="modal" aria-label="Close">
+                    × بستن            
+                </button>
                 </div>
             </div>
         </div>

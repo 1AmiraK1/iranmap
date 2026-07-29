@@ -220,8 +220,16 @@ body {
 }
 
 /* Cards */
-.card-type{
+#card-type{
     position: absolute;
     top: 0;
     left: 0;
+}
+
+#card-info{
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    gap: 5px;
 }
