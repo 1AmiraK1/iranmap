@@ -32,6 +32,8 @@ IR-29 | هرمزگان
 IR-30 | همدان
 IR-30 | یزد
 
-> place your tiles in this path: /public/tiles/
+> place your tiles in this path: /storage/app/tiles/
+
 > your tiles files extension should be .mbtiles
+
 > the name of the tiles file should be like this: IR-01.mbtiles
