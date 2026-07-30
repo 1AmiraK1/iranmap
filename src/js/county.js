@@ -85,6 +85,11 @@ export function onEachCounty(feature, layer) {
                 const tileUrl = `tile_server.php?z={z}&x={x}&y={y}&province=${encodeURIComponent(provinceCode)}`;
                 const targetCountyName = feature.properties.shapeName;
 
+                const finishTileLoading = () => {
+                    if (states.activeCountyName !== targetCountyName) return;
+                    UI.hideTileLoader();
+                };
+
                 if (!states.cityTileLayer) {
                     states.cityTileLayer = L.tileLayer(tileUrl, {
                         maxZoom: mapConfig.maxZoomForCity,
@@ -97,16 +102,18 @@ export function onEachCounty(feature, layer) {
                     states.cityTileLayer.setUrl(tileUrl);
                 }
 
-                states.cityTileLayer.once('load', () => {
-                    if (states.activeCountyName !== targetCountyName) return;
-                    UI.hideTileLoader();
-                });
+                states.cityTileLayer.once('load', finishTileLoading);
 
                 if (!map.hasLayer(states.cityTileLayer)) {
                     map.addLayer(states.cityTileLayer);
                 }
+
+                setTimeout(() => {
+                    if (states.cityTileLayer._loading === false) {
+                        finishTileLoading();
+                    }
+                }, 0);
             });
         }
     });
 }
-

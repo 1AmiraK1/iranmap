@@ -1,7 +1,7 @@
 import { states, mapConfig, styles, isProvinceDisabled, isCountyDisabled } from './config.js';
 import { onEachProvince } from './province.js';
 import { onEachCounty } from './county.js';
-import { createNameLabel } from './labels.js';
+import { createNameLabel, refreshLabels } from './labels.js';
 
 export const initLayers = (map, { seasData, provincesData, countiesData }) => {
     if (seasData) {
@@ -25,6 +25,7 @@ export const initLayers = (map, { seasData, provincesData, countiesData }) => {
             states.provinceLabelsLayer.addLayer(marker);
         });
         states.provinceLabelsLayer.addTo(map);
+        refreshLabels(map, states.provinceLabelsLayer);
         
         let nationalBounds = states.provincesLayer.getBounds();
         if (states.seaLayer) nationalBounds = nationalBounds.extend(states.seaLayer.getBounds());

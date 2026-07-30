@@ -2,7 +2,7 @@ import { map } from './map.js';
 import { states, mapConfig, styles, computeMaxZoomFromMin, isProvinceDisabled } from './config.js';
 import { UI } from './ui.js';
 import { provinceTooltipTemplate } from './templates.js';
-import { createNameLabel } from './labels.js';
+import { createNameLabel, refreshLabels } from './labels.js';
 
 export function onEachProvince(feature, layer) {
     if (isProvinceDisabled(feature)) {
@@ -50,6 +50,7 @@ export function onEachProvince(feature, layer) {
                 if (!map.hasLayer(states.countyLabelsLayer)) {
                     map.addLayer(states.countyLabelsLayer);
                 }
+                refreshLabels(map, states.countyLabelsLayer);
             }
 
             let targetBounds = states.countyLayer.getBounds();

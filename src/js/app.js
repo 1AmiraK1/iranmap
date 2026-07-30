@@ -21,9 +21,13 @@ map.getPane('labels').style.pointerEvents = 'none';
 map.createPane('points');
 map.getPane('points').style.zIndex = 500;
 
-map.on('zoomend', ()=>{
-    refreshLabels(map, states.provinceLabelsLayer);
-    refreshLabels(map, states.countyLabelsLayer);
+let labelRefreshTimer = null;
+map.on('zoomend', () => {
+    clearTimeout(labelRefreshTimer);
+    labelRefreshTimer = setTimeout(() => {
+        refreshLabels(map, states.provinceLabelsLayer);
+        refreshLabels(map, states.countyLabelsLayer);
+    }, 120);
 });
 
 loadMapData().then(data => {
