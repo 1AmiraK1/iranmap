@@ -52,9 +52,6 @@ function getShapeCenter(polygonLayer) {
     return polygonLayer.getBounds().getCenter();
 }
 
-// getComputedStyle() forces the browser to flush any pending layout/style
-// changes. The value is identical for every label, so compute it once and
-// reuse it instead of paying that cost per-marker.
 let cachedFontFamily = null;
 function getLabelFontFamily() {
     if (cachedFontFamily === null) {
@@ -93,11 +90,6 @@ export function createNameLabel(map, polygonLayer, name, className = '') {
 
     marker._boundPolygon = polygonLayer;
     marker._labelText = name;
-    // No per-marker 'add' listener here on purpose: when a whole LayerGroup
-    // of these is added to the map, Leaflet adds each marker one by one, and
-    // sizing every label individually right then causes read/write DOM
-    // thrashing during the fly-to animation. Callers add the whole group
-    // first, then call refreshLabels() once to size everything in one batch.
 
     return marker;
 }
@@ -108,9 +100,6 @@ export function refreshLabels(map, labelLayerGroup) {
     const fontFamily = getLabelFontFamily();
     const pendingWrites = [];
 
-    // Read phase: every DOM/layout read happens first, with no writes
-    // interleaved, so the browser doesn't have to recalculate style/layout
-    // between each marker.
     labelLayerGroup.eachLayer((marker) => {
         const el = marker.getElement();
         if (!el) return;
@@ -124,7 +113,6 @@ export function refreshLabels(map, labelLayerGroup) {
         pendingWrites.push({ el, span, fontSize });
     });
 
-    // Write phase: all DOM writes happen together, in one batch.
     pendingWrites.forEach(({ el, span, fontSize }) => {
         el.style.display = 'flex';
         span.style.fontSize = `${fontSize}px`;
