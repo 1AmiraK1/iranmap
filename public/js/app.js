@@ -14,6 +14,9 @@ map.getPane('provinces').style.zIndex = 400;
 map.createPane('counties');
 map.getPane('counties').style.zIndex = 450;
 
+map.createPane('mask');
+map.getPane('mask').style.zIndex = 460;
+
 map.createPane('labels');
 map.getPane('labels').style.zIndex=470;
 map.getPane('labels').style.pointerEvents = 'none';
@@ -71,7 +74,7 @@ UI.setupEventListeners({
 
     onFullscreenChange: (isFullscreen) => {
         const title = isFullscreen ? "خروج از تمام صفحه" : "تمام صفحه";
-        const iconPath = isFullscreen ? "/assets/image/svg/exit-fullscreen.svg" : "/assets/image/svg/fullscreen.svg";
+        const iconPath = isFullscreen ? "assets/image/svg/exit-fullscreen.svg" : "assets/image/svg/fullscreen.svg";
         UI.changeFullscreenIcon(iconPath);
         UI.updateFullscreenTooltip(title);
 

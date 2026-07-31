@@ -48,30 +48,35 @@ export function onEachCounty(feature, layer) {
             UI.showTileLoader();
 
             states.countyLayer.resetStyle(e.target);
+            const countyBounds = e.target.getBounds();
             states.activeCountyName = feature.properties.shapeName;
-            states.activeCountyBounds = e.target.getBounds();
+            states.activeCountyBounds = countyBounds;
             UI.showCountyLabel(feature.properties.shapeName);
             renderCountyPoints(map, states, feature.properties.shapeName);
 
-            map.removeLayer(states.countyLayer);
-            if (states.countyLabelsLayer && map.hasLayer(states.countyLabelsLayer)) {
-                map.removeLayer(states.countyLabelsLayer);
-            }
-            if (states.maskLayer && map.hasLayer(states.maskLayer)) {
-                map.removeLayer(states.maskLayer);
-            }
-            const maskGeoJSON = createMaskFeature(feature);
-            states.maskLayer = L.geoJSON(maskGeoJSON, {
-                style: styles.mask
-            }).addTo(map);
-
-            const countyBounds = e.target.getBounds();
             map.setMinZoom(0);
             map.setMaxZoom(mapConfig.maxZoomForCity);
             map.setMaxBounds(null);
 
             map.flyToBounds(countyBounds, {
                 duration: 0.25
+            });
+
+            requestAnimationFrame(() => {
+                if (states.activeCountyName !== feature.properties.shapeName) return;
+
+                map.removeLayer(states.countyLayer);
+                if (states.countyLabelsLayer && map.hasLayer(states.countyLabelsLayer)) {
+                    map.removeLayer(states.countyLabelsLayer);
+                }
+                if (states.maskLayer && map.hasLayer(states.maskLayer)) {
+                    map.removeLayer(states.maskLayer);
+                }
+                const maskGeoJSON = createMaskFeature(feature);
+                states.maskLayer = L.geoJSON(maskGeoJSON, {
+                    pane: 'mask',
+                    style: styles.mask
+                }).addTo(map);
             });
 
             map.once('moveend', () => {
@@ -82,7 +87,7 @@ export function onEachCounty(feature, layer) {
 
                 const provinceCode = states.activeProvinceCode;
 
-                const tileUrl = `/php/tiles.php?z={z}&x={x}&y={y}&province=${encodeURIComponent(provinceCode)}`;
+                const tileUrl = `tile_server.php?z={z}&x={x}&y={y}&province=${encodeURIComponent(provinceCode)}`;
                 const targetCountyName = feature.properties.shapeName;
 
                 const finishTileLoading = () => {
