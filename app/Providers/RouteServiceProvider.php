@@ -46,6 +46,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
+        $this->mapTileRoutes();
         //
     }
 
@@ -76,5 +77,17 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+    
+    /**
+     * Define the "tile" routes for the application.
+     *
+     * These routes are used for serving map tiles.
+     *
+     * @return void
+     */
+    protected function mapTileRoutes()
+    {
+        Route::group([], base_path('routes/tiles.php'));
     }
 }

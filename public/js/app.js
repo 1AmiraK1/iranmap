@@ -34,7 +34,6 @@ map.on('zoomend', () => {
 });
 
 loadMapData().then(data => {
-    UI.loadMapDataTimeout();
     if (!data.provincesData) {
         UI.showError('بارگذاری نقشه با خطا مواجه شد. لطفاً صفحه را رفرش کنید.');
         return;
@@ -44,6 +43,7 @@ loadMapData().then(data => {
     }
     setDisabledConfig(data.disabledData);
     initLayers(map, data);
+    setTimeout(() => UI.hideLoader(), 500);
     
     if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(() => {
@@ -74,7 +74,7 @@ UI.setupEventListeners({
 
     onFullscreenChange: (isFullscreen) => {
         const title = isFullscreen ? "خروج از تمام صفحه" : "تمام صفحه";
-        const iconPath = isFullscreen ? "assets/image/svg/exit-fullscreen.svg" : "assets/image/svg/fullscreen.svg";
+        const iconPath = isFullscreen ? `/assets/image/svg/exit-fullscreen.svg` : `/assets/image/svg/fullscreen.svg`;
         UI.changeFullscreenIcon(iconPath);
         UI.updateFullscreenTooltip(title);
 

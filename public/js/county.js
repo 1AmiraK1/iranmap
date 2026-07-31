@@ -45,7 +45,7 @@ export function onEachCounty(feature, layer) {
         },
         mouseout: (e) => states.countyLayer.resetStyle(e.target),
         click: (e) => {
-            UI.showTileLoader();
+            UI.showLoader('در حال بارگذاری شهر...');
 
             states.countyLayer.resetStyle(e.target);
             const countyBounds = e.target.getBounds();
@@ -86,13 +86,12 @@ export function onEachCounty(feature, layer) {
                 map.setMaxBounds(countyBounds.pad(mapConfig.boundsPadding));
 
                 const provinceCode = states.activeProvinceCode;
-
-                const tileUrl = `tile_server.php?z={z}&x={x}&y={y}&province=${encodeURIComponent(provinceCode)}`;
+                const tileUrl = `/php/tiles.php?z={z}&x={x}&y={y}&province=${encodeURIComponent(provinceCode)}`;
                 const targetCountyName = feature.properties.shapeName;
 
                 const finishTileLoading = () => {
                     if (states.activeCountyName !== targetCountyName) return;
-                    UI.hideTileLoader();
+                    UI.hideLoader();
                 };
 
                 if (!states.cityTileLayer) {

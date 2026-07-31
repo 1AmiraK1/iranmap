@@ -7,17 +7,12 @@ const DOM = {
     fullscreenIcon: document.getElementById("fs-icon"),
     mapContainer: document.getElementById("map"),
     mapWrapper: document.getElementById("map-wrapper"),
-    globalLoader: document.getElementById('global-loader'),
+    mapLoadingOverlay: document.getElementById('map-loading-overlay'),
+    mapLoadingText: document.querySelector('#map-loading-overlay .map-loading-text'),
     activeCountyLabel: document.getElementById("activeCountyLabel")
 };
 
 export const UI = {
-    loadMapDataTimeout: () => {
-        setTimeout(() => {
-            DOM.globalLoader.style.visibility = 'hidden';
-        }, 500);
-    },
-
     toggleBackButton: (isVisible) => {
         DOM.backBtn.style.display = isVisible ? "flex" : "none";
     },
@@ -113,32 +108,20 @@ export const UI = {
         DOM.activeCountyLabel.style.display = 'none';
     },
 
-    showTileLoader: () => {
-        let overlay = document.getElementById('map-loading-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'map-loading-overlay';
-            overlay.className = 'map-loading-overlay';
-            const spinner = document.createElement('div');
-            spinner.className = 'map-loading-spinner';
-            overlay.appendChild(spinner);
-            DOM.mapWrapper.appendChild(overlay);
-        }
-        overlay.style.transition = 'none';
-        overlay.style.display = 'block';
-        overlay.style.opacity = '1';
+    showLoader: (text) => {
+        if (!DOM.mapLoadingOverlay) return;
+        if (text) DOM.mapLoadingText.textContent = text;
+        DOM.mapLoadingOverlay.style.transition = 'none';
+        DOM.mapLoadingOverlay.style.display = 'flex';
+        DOM.mapLoadingOverlay.style.opacity = '1';
     },
 
-    hideTileLoader: () => {
-        const overlay = document.getElementById('map-loading-overlay');
+    hideLoader: () => {
+        const overlay = DOM.mapLoadingOverlay;
         if (!overlay || overlay.style.display === 'none') return;
-
         overlay.style.transition = 'opacity 0.35s ease';
         overlay.offsetHeight;
         overlay.style.opacity = '0';
-
-        setTimeout(() => {
-            overlay.style.display = 'none';
-        }, 350);
+        setTimeout(() => { overlay.style.display = 'none'; }, 350);
     },
 };

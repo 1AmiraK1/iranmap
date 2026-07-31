@@ -37,7 +37,7 @@ export const mapHandlers = {
 
     resetToNationalBounds: () => {
         UI.hideCountyLabel();
-        UI.hideTileLoader();
+        UI.hideLoader();
         if (states.countyLayer) states.countyLayer.clearLayers();
         if (states.provinceLabelsLayer && !map.hasLayer(states.provinceLabelsLayer)) {
             map.addLayer(states.provinceLabelsLayer);
@@ -77,7 +77,7 @@ export const mapHandlers = {
 
     resetToProvinceBounds: () => {
         UI.hideCountyLabel();
-        UI.hideTileLoader();
+        UI.hideLoader();
         if (states.maskLayer && map.hasLayer(states.maskLayer)) {
             map.removeLayer(states.maskLayer);
         }
