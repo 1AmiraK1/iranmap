@@ -1,7 +1,7 @@
-const MIN_FONT_SIZE = 5;   
+const MIN_FONT_SIZE = 10;   
 const MAX_FONT_SIZE = 46;  
-const WIDTH_RATIO = 0.5;   
-const HEIGHT_RATIO = 0.5; 
+const WIDTH_RATIO = 0.4;   
+const HEIGHT_RATIO = 0.4; 
 const FONT_WEIGHT = 400;
 
 const measureCanvas = document.createElement('canvas');

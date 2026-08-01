@@ -22,4 +22,4 @@ Route::get('/{province}/{county?}/{point?}', [MapController::class, 'index'])
         'county'   => '[A-Za-z0-9]+',
         'point'    => '[A-Za-z0-9\-]+',
     ])
-    ->name('horeca.index');
+    ->name('horeca.point');
