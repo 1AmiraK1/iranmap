@@ -16,3 +16,10 @@ use App\Http\Controllers\Horeca\MapController;
 
 Route::get('/', [MapController::class, 'index'])->name('horeca.index');
 
+Route::get('/{province}/{county?}/{point?}', [MapController::class, 'index'])
+    ->where([
+        'province' => '[A-Za-z]{2}-[0-9]+',
+        'county'   => '[A-Za-z0-9]+',
+        'point'    => '[A-Za-z0-9\-]+',
+    ])
+    ->name('horeca.index');

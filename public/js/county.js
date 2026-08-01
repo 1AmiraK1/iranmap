@@ -86,7 +86,7 @@ export function onEachCounty(feature, layer) {
                 map.setMaxBounds(countyBounds.pad(mapConfig.boundsPadding));
 
                 const provinceCode = states.activeProvinceCode;
-                const tileUrl = `/php/tiles.php?z={z}&x={x}&y={y}&province=${encodeURIComponent(provinceCode)}`;
+                const tileUrl = `php/tiles.php?z={z}&x={x}&y={y}&province=${encodeURIComponent(provinceCode)}`;
                 const targetCountyName = feature.properties.shapeName;
 
                 const finishTileLoading = () => {

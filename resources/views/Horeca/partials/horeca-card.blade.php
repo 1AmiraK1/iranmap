@@ -11,7 +11,7 @@
                     <h5 class="card-title">{{ $card->name }}</h5>
                     <p class="card-text">آدرس: {{ $card->address }}</p>
                     <p class="card-text rounded bg-primary-subtle m-2 px-2 py-1 small" id="card-type">{{ $card->type }}</p>
-                    <p class="card-text d-flex align-items-center gap-1">تلفن: <small class="text-body-secondary" style="direction: ltr;">{{ $card->phone }}</small></p>
+                    <p class="card-text d-flex align-items-center gap-1">تلفن: <small class="text-body-secondary" style="direction: ltr; align-self: end;">{{ $card->phone }}</small></p>
                     <button type="button" class="btn btn-outline-primary btn-sm" id="card-info"
                             data-bs-toggle="modal" data-bs-target="#imageModal">
                             اطلاعات بیشتر

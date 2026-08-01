@@ -57,7 +57,8 @@ export const styles = {
     countyDisabled: { color: getCssVar('--county-border'), weight: 1, dashArray: '4', fillColor: getCssVar('--county-disabled') || '#a9a9a9', fillOpacity: 0.4, noClip: true, interactive: false },
     sea: { color: getCssVar('--sea-border'), weight: 1, fillColor: getCssVar('--sea-fill'), fillOpacity: 1, noClip: true },
     mask: { fillColor: '#000000', fillOpacity: 0.5, color: '#ff0000', weight: 2, interactive: false },
-    point:{radius: 7, weight: 2, color: '#ffffff', fillColor: getCssVar('--poi-fill') || '#e63946', fillOpacity: 1}
+    point:{radius: 7, weight: 2, color: '#ffffff', fillColor: getCssVar('--poi-fill') || '#e63946', fillOpacity: 1},
+    pointHover:{radius: 10, weight: 3, color: '#ffffff', fillColor: getCssVar('--poi-hover') || '#ff4d5e', fillOpacity: 1}
 };
 
 export const computeMaxZoomFromMin = (minZoom, baseMaxZoom, buffer = 3) => {
