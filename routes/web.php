@@ -16,5 +16,6 @@ use App\Http\Controllers\Horeca\MapController;
 
 Route::get('/', [MapController::class, 'index'])->name('horeca.index');
 
-Route::get('/map/{point?}/{province?}/{county?}', [MapController::class, 'index'])
-    ->name('horeca.map');
+Route::get('/map/{point?}/{province?}/{county?}', [MapController::class, 'index'])->name('horeca.map');
+
+Route::get('/qrcode/{id}', [MapController::class, 'generateQr'])->name('qrcode.generate');
