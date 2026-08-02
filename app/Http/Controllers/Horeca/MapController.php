@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class MapController extends Controller
 {
-    public function index($province = null, $county = null, $point = null)
+    public function index($point = null, $province = null, $county = null)
     {
         $cards = [
             [
@@ -19,7 +19,9 @@ class MapController extends Controller
                 'type' => 'هتل',
                 'phone' => '9821-8855-5555',
                 'provinceCode' => 'IR-07',
-                'countyId' => '1246767862',
+                'countyShapeId' => '6555291',
+                'lat' => 29.5807,
+                'lng' => 50.5124,
             ],
             [
                 'id' => 'p-12335',
@@ -29,13 +31,22 @@ class MapController extends Controller
                 'type' => 'هتل',
                 'phone' => '9821-8888-8888',
                 'provinceCode' => 'IR-07',
-                'countyId' => '1246767863',
+                'countyShapeId' => '6555291',
+                'lat' => 35.7686,
+                'lng' => 51.4104,
             ],
         ];
-        $cards = array_map(function ($item) {
+
+        $cardObjects = array_map(function ($item) {
             return (object) $item;
         }, $cards);
 
-        return view('horeca.index', compact('cards'));
+        return view('horeca.index', [
+            'cards' => $cardObjects,       
+            'mapCardsJson' => $cards,      
+            'initialPoint' => $point,
+            'initialProvince' => $province,
+            'initialCounty' => $county,
+        ]);
     }
 }

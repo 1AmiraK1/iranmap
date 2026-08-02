@@ -1,5 +1,4 @@
 import { mapConfig, states, computeMaxZoomFromMin } from './config.js';
-import { clearCountyPoints } from './point.js';
 import { UI } from './ui.js';
 
 export const map = L.map('map', {
@@ -55,7 +54,6 @@ export const mapHandlers = {
         if (states.cityTileLayer && map.hasLayer(states.cityTileLayer)) {
             map.removeLayer(states.cityTileLayer);
         }
-        clearCountyPoints(map, states);
 
         map.getPane('provinces').style.display = '';
         map.getPane('seas').style.display = '';
@@ -72,6 +70,7 @@ export const mapHandlers = {
         }
         states.activeProvinceCode = null;
         states.activeCountyName = null;
+        states.activeCountyShapeId = null;
         states.activeCountyBounds = null;
     },
 
@@ -85,7 +84,6 @@ export const mapHandlers = {
         if (states.cityTileLayer && map.hasLayer(states.cityTileLayer)) {
             map.removeLayer(states.cityTileLayer);
         }
-        clearCountyPoints(map, states);
 
         if (states.countyLayer && !map.hasLayer(states.countyLayer)) {
             map.addLayer(states.countyLayer);
@@ -114,6 +112,7 @@ export const mapHandlers = {
         }
 
         states.activeCountyName = null;
+        states.activeCountyShapeId = null;
         states.activeCountyBounds = null;
     },
 

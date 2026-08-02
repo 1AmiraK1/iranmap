@@ -47,6 +47,14 @@
 
     <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/leaflet/leaflet.js') }}"></script>
+    <script>
+        window.horecaCards = @json($mapCardsJson);
+        window.initialMapState = {
+            pointId: @json($initialPoint),
+            provinceCode: @json($initialProvince),
+            countyShapeId: @json($initialCounty),
+        };
+    </script>
     <script type="module" src="{{ asset('js/app.js') }}"></script>
 </body>
 

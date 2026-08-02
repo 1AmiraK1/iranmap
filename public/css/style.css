@@ -17,6 +17,10 @@
 
     --sea-fill: #4274D9;
     --sea-border: #999999;
+
+    --poi-fill: #e63946;
+    --poi-hover: #ff4d5e;
+    --poi-active: #19368E;
 }
 
 * {
@@ -219,6 +223,38 @@ body {
     to {
         transform: rotate(360deg);
     }
+}
+
+/* POI / hotel markers */
+.poi-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.poi-marker-shape {
+    width: 26px;
+    height: 34px;
+    background-color: var(--poi-fill);
+    -webkit-mask: url('../assets/image/svg/map-pin.svg') no-repeat center / contain;
+            mask: url('../assets/image/svg/map-pin.svg') no-repeat center / contain;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .35));
+    transition: background-color .15s ease, transform .15s ease;
+    transform-origin: bottom center;
+}
+
+.poi-marker:hover .poi-marker-shape,
+.poi-marker--active .poi-marker-shape {
+    background-color: var(--poi-hover);
+    transform: scale(1.15);
+}
+
+.poi-marker--active .poi-marker-shape {
+    background-color: var(--poi-active);
+}
+
+.poi-tooltip {
+    direction: rtl;
 }
 
 /* Cards */

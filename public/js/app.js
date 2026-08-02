@@ -4,6 +4,8 @@ import { initLayers } from './layers.js';
 import { UI } from './ui.js';
 import { states, setDisabledConfig } from './config.js';
 import {refreshLabels} from './labels.js';
+import { setPointsData, renderAllPoints } from './point.js';
+import { applyInitialRoute } from './deeplink.js';
 
 map.createPane('seas');
 map.getPane('seas').style.zIndex = 300;
@@ -42,9 +44,16 @@ loadMapData().then(data => {
         console.warn('برخی داده‌های نقشه بارگذاری نشدند:', data);
     }
     setDisabledConfig(data.disabledData);
+    setPointsData(window.horecaCards || []);
+    renderAllPoints(map, states);
     initLayers(map, data);
-    setTimeout(() => UI.hideLoader(), 500);
-    
+
+    const route = applyInitialRoute(map, states);
+
+    if (!route.enteredCounty) {
+        setTimeout(() => UI.hideLoader(), 500);
+    }
+
     if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(() => {
             refreshLabels(map, states.provinceLabelsLayer);
