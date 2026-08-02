@@ -18,11 +18,11 @@ export function countyTooltipTemplate(properties) {
     `;
 }
 
-export function pointTooltipTemplate(point) {
+export function pointPanelTemplate(point) {
     return `
-        <div class="map-tooltip poi-tooltip">
+        <div class="point-panel-content">
             <b>${escapeHtml(point.name ?? '')}</b>
-            ${point.address ? `<br><span>${escapeHtml(point.address)}</span>` : ''}
+            ${point.address ? `<span>${escapeHtml(point.address)}</span>` : ''}
         </div>
     `;
 }

@@ -9,7 +9,10 @@ const DOM = {
     mapWrapper: document.getElementById("map-wrapper"),
     mapLoadingOverlay: document.getElementById('map-loading-overlay'),
     mapLoadingText: document.querySelector('#map-loading-overlay .map-loading-text'),
-    activeCountyLabel: document.getElementById("activeCountyLabel")
+    activeCountyLabel: document.getElementById("activeCountyLabel"),
+    activePointPanel: document.getElementById("activePointPanel"),
+    activePointPanelContent: document.getElementById("activePointPanelContent"),
+    activePointPanelClose: document.getElementById("activePointPanelClose")
 };
 
 export const UI = {
@@ -106,6 +109,23 @@ export const UI = {
     hideCountyLabel: () => {
         if (!DOM.activeCountyLabel) return;
         DOM.activeCountyLabel.style.display = 'none';
+    },
+
+    showPointPanel: (html, onClose) => {
+        if (!DOM.activePointPanel || !DOM.activePointPanelContent) return;
+        DOM.activePointPanelContent.innerHTML = html;
+        DOM.activePointPanel.style.display = 'flex';
+        if (DOM.activePointPanelClose) {
+            DOM.activePointPanelClose.onclick = onClose || null;
+        }
+    },
+
+    hidePointPanel: () => {
+        if (!DOM.activePointPanel) return;
+        DOM.activePointPanel.style.display = 'none';
+        if (DOM.activePointPanelClose) {
+            DOM.activePointPanelClose.onclick = null;
+        }
     },
 
     showLoader: (text) => {

@@ -1,10 +1,11 @@
 import { mapConfig, states, computeMaxZoomFromMin } from './config.js';
 import { UI } from './ui.js';
+import { clearPoints, renderPointsForProvince, unpinActivePoint } from './point.js';
 
 export const map = L.map('map', {
     zoomControl: false,
     attributionControl: false,
-    renderer: L.svg({ padding: 15 }),
+    renderer: L.svg({ padding: 1.5 }),
     bounceAtZoomLimits: false,
     zoomSnap: 0.1,
     zoomDelta: 0.25,
@@ -12,6 +13,8 @@ export const map = L.map('map', {
     scrollWheelZoom: true
 });
 map.setView(mapConfig.center, mapConfig.zoom);
+
+map.on('click', () => unpinActivePoint(states));
 
 export const mapHandlers = {
     zoomIn: () => map.zoomIn(),
@@ -54,6 +57,7 @@ export const mapHandlers = {
         if (states.cityTileLayer && map.hasLayer(states.cityTileLayer)) {
             map.removeLayer(states.cityTileLayer);
         }
+        clearPoints(map, states);
 
         map.getPane('provinces').style.display = '';
         map.getPane('seas').style.display = '';
@@ -84,6 +88,7 @@ export const mapHandlers = {
         if (states.cityTileLayer && map.hasLayer(states.cityTileLayer)) {
             map.removeLayer(states.cityTileLayer);
         }
+        renderPointsForProvince(map, states, states.activeProvinceCode);
 
         if (states.countyLayer && !map.hasLayer(states.countyLayer)) {
             map.addLayer(states.countyLayer);

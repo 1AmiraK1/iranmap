@@ -5,6 +5,7 @@ export let states = {
     cityTileLayer: null,
     pointLayer:null,
     pointMarkers: null,
+    activePointMarker: null,
     maskLayer: null,
     provinceLabelsLayer: null,
     countyLabelsLayer: null,

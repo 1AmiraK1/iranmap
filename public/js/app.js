@@ -4,7 +4,7 @@ import { initLayers } from './layers.js';
 import { UI } from './ui.js';
 import { states, setDisabledConfig } from './config.js';
 import {refreshLabels} from './labels.js';
-import { setPointsData, renderAllPoints } from './point.js';
+import { setPointsData } from './point.js';
 import { applyInitialRoute } from './deeplink.js';
 
 map.createPane('seas');
@@ -45,7 +45,6 @@ loadMapData().then(data => {
     }
     setDisabledConfig(data.disabledData);
     setPointsData(window.horecaCards || []);
-    renderAllPoints(map, states);
     initLayers(map, data);
 
     const route = applyInitialRoute(map, states);
@@ -69,6 +68,7 @@ UI.setupEventListeners({
     onFullscreen: UI.toggleFullscreen,
 
     onBack: () => {
+        window.history.pushState({}, document.title, '/');
         if (states.maskLayer && map.hasLayer(states.maskLayer)) {
             UI.fadeMap(() => {
                 mapHandlers.resetToProvinceBounds();

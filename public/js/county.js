@@ -2,6 +2,7 @@ import { states, mapConfig, styles, isCountyDisabled } from './config.js';
 import { countyTooltipTemplate } from './templates.js';
 import { map } from './map.js';
 import { UI } from './ui.js';
+import { renderPointsForCounty } from './point.js';
 
 function createMaskFeature(feature) {
     const outerRing = [
@@ -39,6 +40,7 @@ export function navigateToCounty(feature, layer, options = {}) {
     states.activeCountyName = feature.properties.shapeName;
     states.activeCountyShapeId = targetCountyShapeId;
     states.activeCountyBounds = countyBounds;
+    renderPointsForCounty(map, states, targetCountyShapeId);
     UI.showCountyLabel(feature.properties.shapeName);
 
     map.setMinZoom(0);
@@ -62,7 +64,8 @@ export function navigateToCounty(feature, layer, options = {}) {
         const maskGeoJSON = createMaskFeature(feature);
         states.maskLayer = L.geoJSON(maskGeoJSON, {
             pane: 'mask',
-            style: styles.mask
+            style: styles.mask,
+            renderer: L.canvas({ padding: 0.5 })
         }).addTo(map);
     });
 
@@ -73,7 +76,7 @@ export function navigateToCounty(feature, layer, options = {}) {
         map.setMaxBounds(countyBounds.pad(mapConfig.boundsPadding));
 
         const provinceCode = states.activeProvinceCode;
-        const tileUrl = `/php/tiles.php?z={z}&x={x}&y={y}&province=${encodeURIComponent(provinceCode)}`;
+        const tileUrl = `/tiles/${encodeURIComponent(provinceCode)}/{z}/{x}/{y}.png`;
 
         const finishTileLoading = () => {
             if (states.activeCountyShapeId !== targetCountyShapeId) return;

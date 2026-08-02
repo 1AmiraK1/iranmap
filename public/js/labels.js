@@ -1,8 +1,8 @@
-const MIN_FONT_SIZE = 10;   
-const MAX_FONT_SIZE = 46;  
-const WIDTH_RATIO = 0.4;   
-const HEIGHT_RATIO = 0.4; 
-const FONT_WEIGHT = 400;
+const MIN_FONT_SIZE = 12;
+const MAX_FONT_SIZE = 18;
+const WIDTH_RATIO = 0.85;
+const HEIGHT_RATIO = 0.6;
+const FONT_WEIGHT = 700;
 
 const measureCanvas = document.createElement('canvas');
 const measureCtx = measureCanvas.getContext('2d');
@@ -45,11 +45,34 @@ function getPixelSize(map, bounds) {
 }
 
 function getShapeCenter(polygonLayer) {
+    let center;
     if (typeof polygonLayer.getCenter === 'function') {
-        const center = polygonLayer.getCenter();
-        if (center) return center;
+        center = polygonLayer.getCenter();
+    } else {
+        center = polygonLayer.getBounds().getCenter();
     }
-    return polygonLayer.getBounds().getCenter();
+
+    if (center && polygonLayer.feature && polygonLayer.feature.properties) {
+        const provinceName = polygonLayer.feature.properties.shapeName;
+
+        const customOffsets = {
+            'هرمزگان': [0.6, 0],   
+            'بوشهر': [0.0, 0.1],  
+            'مرکزی': [0.0, -0.3],  
+            'تهران': [0.0, -0.2],  
+            'Karaj': [0.0, -0.05],  
+            'آذربایجان غربی': [0.1, -0.3],  
+        };
+
+        if (customOffsets[provinceName]) {
+            return L.latLng(
+                center.lat + customOffsets[provinceName][0],
+                center.lng + customOffsets[provinceName][1]
+            );
+        }
+    }
+
+    return center;
 }
 
 let cachedFontFamily = null;

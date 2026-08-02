@@ -21,4 +21,3 @@ export const loadMapData = async () => {
 
     return { seasData, provincesData, countiesData, disabledData };
 };
-

@@ -3,10 +3,12 @@ import { states, mapConfig, styles, computeMaxZoomFromMin, isProvinceDisabled } 
 import { UI } from './ui.js';
 import { provinceTooltipTemplate } from './templates.js';
 import { createNameLabel, refreshLabels } from './labels.js';
+import { renderPointsForProvince } from './point.js';
 
 export function navigateToProvince(feature, layer) {
     states.provincesLayer.resetStyle(layer);
     states.activeProvinceCode = feature.properties.shapeISO;
+    renderPointsForProvince(map, states, states.activeProvinceCode);
 
     UI.toggleBackButton(true);
     map.getPane('provinces').style.display = 'none';

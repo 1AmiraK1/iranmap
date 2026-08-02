@@ -17,4 +17,9 @@
                             src="{{ asset('assets/image/svg/back.svg') }}" alt="back"></button>
                 </div>
                 <div id="activeCountyLabel" class="active-county-label"></div>
+                <div id="activePointPanel" class="active-point-panel">
+                    <button id="activePointPanelClose" class="active-point-panel-close" type="button"
+                        aria-label="بستن">×</button>
+                    <div id="activePointPanelContent"></div>
+                </div>
             </div>

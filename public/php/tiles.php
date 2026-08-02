@@ -3,7 +3,7 @@ $z = isset($_GET['z']) ? intval($_GET['z']) : 0;
 $x = isset($_GET['x']) ? intval($_GET['x']) : 0;
 $y = isset($_GET['y']) ? intval($_GET['y']) : 0;
 
-$disabledPath = __DIR__ . '../assets/data/disabled.json';
+$disabledPath = __DIR__ . '/../assets/data/disabled.json';
 $disabledProvinces = [];
 if (file_exists($disabledPath)) {
     $disabledData = json_decode(file_get_contents($disabledPath), true);
@@ -18,7 +18,7 @@ if (in_array($province, $disabledProvinces, true)) {
     exit;
 }
 
-$db_path = __DIR__ . "../../../storage/app/tiles/{$province}.mbtiles";
+$db_path = __DIR__ . "/../../storage/app/tiles/{$province}.mbtiles";
 
 if (!file_exists($db_path)) {
     header("HTTP/1.0 404 Not Found");
@@ -27,21 +27,29 @@ if (!file_exists($db_path)) {
 
 try {
     $db = new PDO("sqlite:$db_path", null, null, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
     $tms_y = pow(2, $z) - 1 - $y;
 
     $stmt = $db->prepare("SELECT tile_data FROM tiles WHERE zoom_level = :z AND tile_column = :x AND tile_row IN (:y_tms, :y_xyz) LIMIT 1");
-
-    $stmt->execute([':z' => $z, ':x' => $x, ':y_tms' => $tms_y, ':y_xyz' => $y]);
+    
+    $stmt->bindValue(':z', $z, PDO::PARAM_INT);
+    $stmt->bindValue(':x', $x, PDO::PARAM_INT);
+    $stmt->bindValue(':y_tms', $tms_y, PDO::PARAM_INT);
+    $stmt->bindValue(':y_xyz', $y, PDO::PARAM_INT);
+    
+    $stmt->execute();
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($row && !empty($row['tile_data'])) {
+        $expires = 60 * 60 * 24 * 7; 
+        header("Pragma: public");
+        header("Cache-Control: max-age=" . $expires);
+        header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+        
         header("Content-Type: image/png");
-
-        // header("Cache-Control: public, max-age=86400"); 
 
         echo $row['tile_data'];
     } else {
@@ -51,3 +59,4 @@ try {
     error_log('tile_server.php error [' . $db_path . ']: ' . $e->getMessage());
     header("HTTP/1.0 500 Internal Server Error");
 }
+?>
