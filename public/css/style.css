@@ -18,9 +18,9 @@
     --sea-fill: #4274D9;
     --sea-border: #999999;
 
-    --poi-fill: #e63946;
-    --poi-hover: #ff4d5e;
-    --poi-active: #19368E;
+    --poi-fill: #e72134;
+    --poi-hover: #f4f81b;
+    --poi-active: #f4f81b;
 }
 
 * {
@@ -225,7 +225,7 @@ body {
     }
 }
 
-/* POI / hotel markers */
+/* POI - markers */
 .poi-marker {
     display: flex;
     align-items: center;
@@ -233,23 +233,41 @@ body {
 }
 
 .poi-marker-shape {
-    width: 26px;
-    height: 34px;
-    background-color: var(--poi-fill);
+    position: relative;
+    width: 30px; 
+    height: 38px; 
+    background-color: #1f0000;               
     -webkit-mask: url('../assets/images/svg/map-pin.svg') no-repeat center / 100% 100%;
             mask: url('../assets/images/svg/map-pin.svg') no-repeat center / 100% 100%;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .35));
-    transition: background-color .15s ease, transform .15s ease;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)); 
+    transition: transform .15s ease;
     transform-origin: bottom center;
+}
+
+.poi-marker-shape::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    right: 1%;
+    bottom: 2px;
+    left: 2px;
+    background-color: var(--poi-fill);     
+    -webkit-mask: url('../assets/images/svg/map-pin.svg') no-repeat center / 100% 100%;
+            mask: url('../assets/images/svg/map-pin.svg') no-repeat center / 100% 100%;
+    transition: background-color .15s ease;
 }
 
 .poi-marker:hover .poi-marker-shape,
 .poi-marker--active .poi-marker-shape {
-    background-color: var(--poi-hover);
     transform: scale(1.15);
 }
 
-.poi-marker--active .poi-marker-shape {
+.poi-marker:hover .poi-marker-shape::after,
+.poi-marker--active .poi-marker-shape::after {
+    background-color: var(--poi-hover);
+}
+
+.poi-marker--active .poi-marker-shape::after {
     background-color: var(--poi-active);
 }
 
