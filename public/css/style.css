@@ -236,8 +236,8 @@ body {
     width: 26px;
     height: 34px;
     background-color: var(--poi-fill);
-    -webkit-mask: url('../assets/image/svg/map-pin.svg') no-repeat center / 100% 100%;
-            mask: url('../assets/image/svg/map-pin.svg') no-repeat center / 100% 100%;
+    -webkit-mask: url('../assets/images/svg/map-pin.svg') no-repeat center / 100% 100%;
+            mask: url('../assets/images/svg/map-pin.svg') no-repeat center / 100% 100%;
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .35));
     transition: background-color .15s ease, transform .15s ease;
     transform-origin: bottom center;
@@ -309,14 +309,24 @@ body {
 }
 
 /* Cards */
-#card-type {
+.card-type {
     position: absolute;
     top: 0;
     right: 0;
 }
 
-#card-info {
+.card-info {
     display: flex;
     justify-content: center;
-    flex-grow: 1;
+}
+
+.card-info {
+    display: flex;
+    justify-content: center;
+}
+
+#cardsListContainer.is-loading {
+    opacity: .5;
+    pointer-events: none;
+    transition: opacity .15s ease;
 }

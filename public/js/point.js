@@ -11,12 +11,12 @@ export function setPointsData(cards) {
         .filter(card => card.lat != null && card.lng != null)
         .map(card => ({
             id: String(card.id),
-            name: card.name,
+            name: card.title,
             address: card.address,
             lat: Number(card.lat),
             lng: Number(card.lng),
-            provinceCode: card.provinceCode,
-            countyShapeId: String(card.countyShapeId ?? card.countyId ?? '')
+            provinceCode: card.province_id,
+            countyShapeId: String(card.county_id ?? '')
         }));
 }
 

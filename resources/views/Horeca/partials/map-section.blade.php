@@ -6,15 +6,15 @@
                 </div>
                 <div class="map-controls">
                     <button id="zoomIn" class="map-btn svg-icon" data-title="بزرگ‌نمایی"><img
-                            src="{{ asset('assets/image/svg/zoom-in.svg') }}" alt="zoom in"></button>
+                            src="{{ asset('assets/images/svg/zoom-in.svg') }}" alt="zoom in"></button>
                     <button id="zoomOut" class="map-btn svg-icon" data-title="کوچک‌نمایی"><img
-                            src="{{ asset('assets/image/svg/zoom-out.svg') }}" alt="zoom out"></button>
+                            src="{{ asset('assets/images/svg/zoom-out.svg') }}" alt="zoom out"></button>
                     <button id="fitBoundsBtn" class="map-btn svg-icon" data-title="فیت شدن نقشه"><img
-                            src="{{ asset('assets/image/svg/fit.svg') }}" alt="fit"></button>
+                            src="{{ asset('assets/images/svg/fit.svg') }}" alt="fit"></button>
                     <button id="fullscreenBtn" class="map-btn svg-icon" data-title="تمام صفحه"><img id="fs-icon"
-                            src="{{ asset('assets/image/svg/fullscreen.svg') }}" alt="fullscreen"></button>
+                            src="{{ asset('assets/images/svg/fullscreen.svg') }}" alt="fullscreen"></button>
                     <button id="back" class="map-btn svg-icon" data-title="بازگشت"><img
-                            src="{{ asset('assets/image/svg/back.svg') }}" alt="back"></button>
+                            src="{{ asset('assets/images/svg/back.svg') }}" alt="back"></button>
                 </div>
                 <div id="activeCountyLabel" class="active-county-label"></div>
                 <div id="activePointPanel" class="active-point-panel">

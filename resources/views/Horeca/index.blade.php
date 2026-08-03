@@ -19,10 +19,8 @@
                 <h1>Map</h1>
             </div>
             <hr>
-            <div class="list-items p-2">
-                @foreach ($cards as $card)
-                    @include('horeca.partials.horeca-card', ['card' => $card])
-                @endforeach
+            <div class="list-items p-2" id="cardsListContainer">
+                @include('horeca.partials.cards-list', ['cards' => $cards])
             </div>
         </div>
         <div class="map-section">
@@ -46,18 +44,20 @@
             </div>
         </div>
     </div>
-
     <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/leaflet/leaflet.js') }}"></script>
     <script>
         window.horecaCards = @json($mapCardsJson);
+        console.log(window.horecaCards);
         window.initialMapState = {
             pointId: @json($initialPoint),
             provinceCode: @json($initialProvince),
             countyShapeId: @json($initialCounty),
         };
+        console.log(window.initialMapState);
     </script>
     <script type="module" src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/pagination.js') }}"></script>
 </body>
 
 </html>

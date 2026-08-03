@@ -10,66 +10,68 @@ use Exception;
 
 class MapController extends Controller
 {
+    protected $perPage = 1;
+
     public function index($point = null, $province = null, $county = null)
     {
         try {
-            $cards = DB::table('horecas')->get();
+            $baseQuery = DB::table('horeca_list')
+                ->leftJoin('horeca_images', function ($join) {
+                    $join->on('horeca_list.id', '=', 'horeca_images.horeca_id')
+                        ->where('horeca_images.is_main', 1);
+                })
+                ->leftJoin('horeca_types', 'horeca_list.type_id', '=', 'horeca_types.id')
+                ->select(
+                    'horeca_list.*',
+                    'horeca_images.image_path as main_image',
+                    'horeca_types.type_title'
+                )
+                ->orderBy('horeca_list.id');
+
+            $cards = (clone $baseQuery)
+                ->paginate($this->perPage)
+                ->appends(request()->query());
+
+            if (request()->ajax()) {
+                return view('horeca.partials.cards-list', ['cards' => $cards]);
+            }
+
+            $mapCards = $baseQuery->get();
 
             return view('horeca.index', [
                 'cards' => $cards,
-                'mapCardsJson' => $cards,
+                'mapCardsJson' => $mapCards,
                 'initialPoint' => $point,
                 'initialProvince' => $province,
                 'initialCounty' => $county,
             ]);
         } catch (Exception $e) {
             Log::error('خطا در بارگذاری نقشه: ' . $e->getMessage());
+            $error = 'مشکلی در برقراری ارتباط با دیتابیس رخ داده است.';
+            $emptyCards = new \Illuminate\Pagination\LengthAwarePaginator([], 0, $this->perPage);
+
+            if (request()->ajax()) {
+                return view('horeca.partials.cards-list', [
+                    'cards' => $emptyCards,
+                    'error' => $error,
+                ]);
+            }
 
             return view('horeca.index', [
-                'cards' => [],
+                'cards' => $emptyCards,
                 'mapCardsJson' => [],
                 'initialPoint' => null,
                 'initialProvince' => null,
                 'initialCounty' => null,
-                'error' => 'مشکلی در برقراری ارتباط با دیتابیس رخ داده است.'
+                'error' => $error,
             ]);
         }
-        // $cards = [
-        //     [
-        //         'id' => 'p-12334',
-        //         'name' => 'هتل اسپیناس پالاس',
-        //         'image' => asset('assets/image/horeca/test.jpg'),
-        //         'address' => 'تهران، بزرگراه چمران، خیابان شیخ فضل‌الله نوری، بعد از پل پارک وی، هتل اسپیناس پالاس',
-        //         'type' => 'هتل',
-        //         'phone' => '9821-8855-5555',
-        //         'provinceCode' => 'IR-07',
-        //         'countyShapeId' => '6555291',
-        //         'lat' => 29.5807,
-        //         'lng' => 50.5124,
-        //     ],
-        //     [
-        //         'id' => 'p-12335',
-        //         'name' => 'هتل استقلال تهران',
-        //         'image' => asset('assets/image/horeca/test.jpg'),
-        //         'address' => 'تهران، خیابان ولیعصر، بالاتر از میدان ونک، هتل استقلال تهران',
-        //         'type' => 'هتل',
-        //         'phone' => '9821-8888-8888',
-        //         'provinceCode' => 'IR-07',
-        //         'countyShapeId' => '6555291',
-        //         'lat' => 35.7686,
-        //         'lng' => 51.4104,
-        //     ],
-        // ];
-
-        // $cardObjects = array_map(function ($item) {
-        //     return (object) $item;
-        // }, $cards);
     }
 
     public function generateQr(string $id)
     {
         try {
-            $place = DB::table('horecas')->where('id', $id)->first();
+            $place = DB::table('horeca_list')->where('id', $id)->first();
 
             if (!$place) {
                 abort(404, 'مکان مورد نظر یافت نشد');
