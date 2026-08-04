@@ -129,12 +129,14 @@ export function fitAndConstrain(bounds, options = {}) {
         baseMaxZoom,
         exactMaxZoom,
         padding = mapConfig.boundsPadding,
+        abortGuard,
         onEnd
     } = options;
 
     if (!bounds || typeof bounds.isValid !== 'function' || !bounds.isValid()) return null;
 
     map.setMinZoom(0);
+    map.setMaxZoom(mapConfig.maxZoomForCity); 
     map.setMaxBounds(null);
 
     const targetMinZoom = map.getBoundsZoom(bounds);
@@ -148,7 +150,12 @@ export function fitAndConstrain(bounds, options = {}) {
         targetMaxZoom = targetMinZoom;
     }
 
+    let constraintsApplied = false;
     const applyConstraints = () => {
+        if (constraintsApplied) return;
+        constraintsApplied = true;
+        map.off('moveend', applyConstraints);
+        if (typeof abortGuard === 'function' && abortGuard()) return;
         map.setMinZoom(targetMinZoom);
         map.setMaxZoom(targetMaxZoom);
         map.setMaxBounds(bounds.pad(padding));
@@ -156,9 +163,10 @@ export function fitAndConstrain(bounds, options = {}) {
     };
 
     if (animate) {
-        map.setMaxZoom(mapConfig.maxZoomForCity);
+        map.on('moveend', applyConstraints);
         map.flyToBounds(bounds, { duration: 0.25 });
         map.once('moveend', applyConstraints);
+        setTimeout(applyConstraints, 350);
     } else {
         map.fitBounds(bounds, { animate: false });
         applyConstraints();

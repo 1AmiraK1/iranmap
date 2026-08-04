@@ -15,7 +15,7 @@ function findLayerByProperty(layerGroup, propName, value) {
     return found;
 }
 
-export function applyInitialRoute(map, initialMapState) {
+export async function applyInitialRoute(map, initialMapState) {
     const initial = initialMapState;
     if (!initial || !initial.provinceCode) {
         return { entered: false, enteredCounty: false };
@@ -27,7 +27,7 @@ export function applyInitialRoute(map, initialMapState) {
         return { entered: false, enteredCounty: false };
     }
 
-    navigateToProvince(provinceLayer.feature, provinceLayer);
+    await navigateToProvince(provinceLayer.feature, provinceLayer);
 
     if (!initial.countyShapeId) {
         return { entered: true, enteredCounty: false };

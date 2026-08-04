@@ -6,7 +6,7 @@ export const provinceTooltipTemplate = (properties) => {
     
     return `
         <div class="map-tooltip">
-            <h6 class="mb-1">${properties.shapeName}</h6>
+            <h6 class="mb-1">${escapeHtml(properties.shapeName)}</h6>
             <span class="badge bg-danger">تعداد رستوران: ${count}</span>
         </div>
     `;
@@ -17,7 +17,7 @@ export const countyTooltipTemplate = (properties) => {
     
     return `
         <div class="map-tooltip">
-            <h6 class="mb-1">${properties.shapeName}</h6>
+            <h6 class="mb-1">${escapeHtml(properties.shapeName)}</h6>
             <span class="badge bg-danger">تعداد رستوران: ${count}</span>
         </div>
     `;

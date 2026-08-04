@@ -8,7 +8,8 @@ import { renderPointsForProvince } from './point.js';
 export function navigateToProvince(feature, layer) {
     states.provincesLayer.resetStyle(layer);
     states.activeProvinceCode = feature.properties.shapeISO;
-    renderPointsForProvince(map, states.activeProvinceCode);
+    
+    const pointsPromise = renderPointsForProvince(map, states.activeProvinceCode);
 
     UI.toggleBackButton(true);
     map.getPane('provinces').style.display = 'none';
@@ -47,19 +48,14 @@ export function navigateToProvince(feature, layer) {
 
     map.invalidateSize({ debounceMoveend: true });
 
-    map.setMinZoom(0);
-    map.setMaxZoom(mapConfig.maxZoomForCity);
-    map.setMaxBounds(null);
-
     if (targetBounds.isValid()) {
         fitAndConstrain(targetBounds, {
             animate: true,
             baseMaxZoom: mapConfig.maxZoomForProvince,
-            onEnd: () => {
-                if (states.activeProvinceCode !== feature.properties.shapeISO) return;
-            }
+            abortGuard: () => states.activeProvinceCode !== feature.properties.shapeISO
         });
     }
+    return pointsPromise;
 }
 
 export function onEachProvince(feature, layer) {

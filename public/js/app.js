@@ -48,7 +48,7 @@ if (bootstrapScriptElement) {
 const { initialMapState, counts } = bootstrapData;
 states.counts = counts;
 
-loadMapData().then(data => {
+loadMapData().then(async (data) => {
     if (!data.provincesData || !data.seasData || !data.countiesData || !data.disabledData) {
         UI.hideLoader();
         UI.showError('بارگذاری نقشه با خطا مواجه شد. لطفاً صفحه را رفرش کنید.');
@@ -57,7 +57,7 @@ loadMapData().then(data => {
     setDisabledConfig(data.disabledData);
     initLayers(map, data);
 
-    const route = applyInitialRoute(map, initialMapState);
+    const route = await applyInitialRoute(map, initialMapState);
 
     if (!route.enteredCounty) {
         setTimeout(() => UI.hideLoader(), 500);
@@ -71,7 +71,7 @@ loadMapData().then(data => {
     }
 }).catch(error => {
     console.error('خطای بحرانی در راه‌اندازی نقشه:', error);
-    UI.hideLoader();
+    UI.hideLoader(true);
     UI.showError('خطایی در اجرای نقشه رخ داد. لطفاً صفحه را رفرش کنید.');
 });
 
@@ -97,7 +97,7 @@ UI.setupEventListeners({
 
     onFullscreenChange: (isFullscreen) => {
         const title = isFullscreen ? "خروج از تمام صفحه" : "تمام صفحه";
-        const iconPath = isFullscreen ? `assets/images/svg/exit-fullscreen.svg` : `assets/images/svg/fullscreen.svg`;
+        const iconPath = isFullscreen ? `../assets/images/svg/exit-fullscreen.svg` : `../assets/images/svg/fullscreen.svg`;
         UI.changeFullscreenIcon(iconPath);
         UI.updateFullscreenTooltip(title);
 

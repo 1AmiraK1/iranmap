@@ -2,7 +2,7 @@
     <div class="card mb-3">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="{{ asset('assets/images/horeca/' . $card->main_image) }}" class="img-fluid mx-auto rounded-start w-100 object-fit-cover"
+                <img src="{{ $card->main_image ? asset('assets/images/horeca/'.$card->main_image) : asset('assets/images/test.jpg') }}" class="img-fluid mx-auto rounded-start w-100 object-fit-cover"
                     alt="{{ $card->title }}" style="height: 200px;">
             </div>
             <div class="col-md-8">

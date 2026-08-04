@@ -46,9 +46,8 @@ export function navigateToCounty(feature, layer, options = {}) {
     fitAndConstrain(countyBounds, {
         animate: true,
         exactMaxZoom: mapConfig.maxZoomForCity,
+        abortGuard: () => states.activeCountyShapeId !== targetCountyShapeId,
         onEnd: (cityMinZoom) => {
-            if (states.activeCountyShapeId !== targetCountyShapeId) return;
-
             const provinceCode = states.activeProvinceCode;
             const tileUrl = `/tiles/${encodeURIComponent(provinceCode)}/{z}/{x}/{y}.png`;
 
@@ -57,8 +56,8 @@ export function navigateToCounty(feature, layer, options = {}) {
             const finishTileLoading = () => {
                 if (isTileLoaded) return;
                 isTileLoaded = true;
-                if (states.activeCountyShapeId !== targetCountyShapeId) return;
                 UI.hideLoader();
+                if (states.activeCountyShapeId !== targetCountyShapeId) return;
                 if (typeof onReady === 'function') onReady();
             };
 

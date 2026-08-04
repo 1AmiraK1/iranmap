@@ -44,7 +44,7 @@ export const mapConfig = {
     maxZoomForCountry: 7,
     maxZoomForProvince: 10,
     maxZoomForCity: 13,
-    boundsPadding: 0.1,
+    boundsPadding: 0.01,
     tileNativeZoom: 12
 };
 

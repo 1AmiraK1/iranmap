@@ -4,6 +4,7 @@ import { states } from './config.js';
 
 let allPoints = [];
 let fetchedProvinces = new Set();
+const inFlightFetches = new Map();
 let pendingHighlightPointId = null;
 
 const ICON_WIDTH = 26;
@@ -71,13 +72,13 @@ function renderPoints(map, points) {
         marker.on('click', (e) => {
             L.DomEvent.stopPropagation(e);
             if (marker._pinned) {
-                unpinMarker(states, marker);
+                unpinMarker(marker);
                 return;
             }
             if (states.activePointMarker) {
-                unpinMarker(states, states.activePointMarker);
+                unpinMarker(states.activePointMarker);
             }
-            pinMarker(states, marker);
+            pinMarker(marker);
         });
 
         states.pointMarkers[point.id] = marker;
@@ -96,28 +97,39 @@ export async function renderPointsForProvince(map, provinceCode) {
     const targetProv = String(provinceCode);
 
     if (!fetchedProvinces.has(targetProv)) {
-        UI.showLoader();
-        try {
-            const response = await fetch(`/map-points/${targetProv}`);
-            if (response.ok) {
-                const data = await response.json();
+        UI.showLoader('در حال بارگذاری اطلاعات استان...');
+        if (!inFlightFetches.has(targetProv)) {
+            const fetchPromise = (async () => {
+                try {
+                    const response = await fetch(`/map-points/${encodeURIComponent(targetProv)}`);
+                    if (response.ok) {
+                        const data = await response.json();
 
-                const formattedPoints = data.filter(card => card.lat != null && card.lng != null).map(card => ({
-                    id: String(card.id),
-                    name: card.title,
-                    address: card.address,
-                    lat: Number(card.lat),
-                    lng: Number(card.lng),
-                    provinceCode: String(card.province_id),
-                    countyShapeId: String(card.county_id ?? '')
-                }));
+                        const formattedPoints = data.filter(card => card.lat != null && card.lng != null).map(card => ({
+                            id: String(card.id),
+                            name: card.title,
+                            address: card.address,
+                            lat: Number(card.lat),
+                            lng: Number(card.lng),
+                            provinceCode: String(card.province_id),
+                            countyShapeId: String(card.county_id ?? '')
+                        }));
 
-                allPoints = [...allPoints, ...formattedPoints];
-                fetchedProvinces.add(targetProv);
-            }
-        } catch (error) {
-            console.error('خطا در دریافت نقاط استان (AJAX):', error);
+                        allPoints = [...allPoints, ...formattedPoints];
+                        fetchedProvinces.add(targetProv);
+                    }
+                } catch (error) {
+                    console.error('خطا در دریافت نقاط استان (AJAX):', error);
+                } finally {
+                    inFlightFetches.delete(targetProv);
+                }
+            })();
+
+            inFlightFetches.set(targetProv, fetchPromise);
         }
+
+        await inFlightFetches.get(targetProv);
+
         UI.hideLoader();
     }
     const filtered = allPoints.filter(point => String(point.provinceCode) === targetProv);

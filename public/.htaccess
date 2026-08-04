@@ -5,8 +5,8 @@
 
     RewriteEngine On
 
-    RewriteRule ^tiles/([a-zA-Z0-9_-]+)/([0-9]+)/([0-9]+)/([0-9]+)\.(png|jpg)$ php/tiles.php?province=$1&z=$2&x=$3&y=$4 [L,QSA]
-    
+    RewriteRule ^tiles/([^/]+)/([0-9]+)/([0-9]+)/([0-9]+)\.(png|jpg|webp)$ php/tiles.php?province=$1&z=$2&x=$3&y=$4 [L,QSA]   
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -20,4 +20,18 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(geojson|json)$">
+        Header set Cache-Control "max-age=2592000, public, must-revalidate"
+    </FilesMatch>
+
+    <FilesMatch "\.(png|jpg|jpeg|webp|svg|woff|woff2|ttf|eot)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_expires.c>
+    FileETag MTime Size
 </IfModule>

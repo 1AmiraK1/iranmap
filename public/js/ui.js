@@ -1,3 +1,5 @@
+let activeLoaders = 0;
+
 const DOM = {
     zoomInBtn: document.getElementById("zoomIn"),
     zoomOutBtn: document.getElementById("zoomOut"),
@@ -12,7 +14,7 @@ const DOM = {
     activeCountyLabel: document.getElementById("activeCountyLabel"),
     activePointPanel: document.getElementById("activePointPanel"),
     activePointPanelContent: document.getElementById("activePointPanelContent"),
-    activePointPanelClose: document.getElementById("activePointPanelClose")
+    activePointPanelClose: document.getElementById("activePointPanelClose"),
 };
 
 export const UI = {
@@ -130,18 +132,35 @@ export const UI = {
 
     showLoader: (text) => {
         if (!DOM.mapLoadingOverlay) return;
+        activeLoaders++;
         if (text) DOM.mapLoadingText.textContent = text;
         DOM.mapLoadingOverlay.style.transition = 'none';
         DOM.mapLoadingOverlay.style.display = 'flex';
         DOM.mapLoadingOverlay.style.opacity = '1';
     },
 
-    hideLoader: () => {
+    hideLoader: (force = false) => {
         const overlay = DOM.mapLoadingOverlay;
-        if (!overlay || overlay.style.display === 'none') return;
+        if (!overlay) return;
+
+        if (force) {
+            activeLoaders = 0;
+        } else {
+            activeLoaders = Math.max(0, activeLoaders - 1);
+        }
+
+        if (activeLoaders > 0) return;
+
+        if (overlay.style.display === 'none') return;
+
         overlay.style.transition = 'opacity 0.35s ease';
-        overlay.offsetHeight;
+        overlay.offsetHeight; // Force reflow
         overlay.style.opacity = '0';
-        setTimeout(() => { overlay.style.display = 'none'; }, 350);
+        
+        setTimeout(() => { 
+            if (activeLoaders === 0) {
+                overlay.style.display = 'none'; 
+            }
+        }, 350);
     },
 };

@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Horeca;
 
 use App\Http\Controllers\Controller;
-use SimpleSoftwareIO\QrCode\Facade as QrCode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class MapController extends Controller
 {
     protected $perPage = 1;
 
-    public function index($point = null, $province = null, $county = null)
+    public function index($province = null, $county = null, $point = null)
     {
         try {
             $baseQuery = DB::table('horeca_list')
@@ -35,25 +35,33 @@ class MapController extends Controller
                 return view('horeca.partials.cards-list', ['cards' => $cards]);
             }
 
-            $provinceCounts = DB::table('horeca_list')
+            $provinceCounts = Cache::remember('province_counts', 86400, function () {
+                return DB::table('horeca_list')
                 ->whereNotNull('province_id')
+                ->whereNotNull('lat')
+                ->whereNotNull('lng')
                 ->groupBy('province_id')
                 ->select('province_id', DB::raw('count(*) as count'))
                 ->pluck('count', 'province_id');
+            });
 
-            $countyCounts = DB::table('horeca_list')
-                ->whereNotNull('county_id')
-                ->groupBy('county_id')
+            $countyCounts = Cache::remember('county_counts', 86400, function () {
+                return DB::table('horeca_list')
+                    ->whereNotNull('county_id')
+                    ->whereNotNull('lat')
+                    ->whereNotNull('lng')
+                    ->groupBy('county_id')
                 ->select('county_id', DB::raw('count(*) as count'))
                 ->pluck('count', 'county_id');
+            });
 
             return view('horeca.index', [
                 'cards' => $cards,
-                'initialPoint' => $point,
                 'initialProvince' => $province,
                 'initialCounty' => $county,
-                'provinceCounts' => $provinceCounts, 
-                'countyCounts' => $countyCounts,     
+                'initialPoint' => $point,
+                'provinceCounts' => $provinceCounts,
+                'countyCounts' => $countyCounts,
             ]);
         } catch (\Throwable $e) {
             Log::error('خطا در بارگذاری نقشه: ' . $e->getMessage());
@@ -69,9 +77,11 @@ class MapController extends Controller
 
             return view('horeca.index', [
                 'cards' => $emptyCards,
-                'initialPoint' => null,
                 'initialProvince' => null,
                 'initialCounty' => null,
+                'initialPoint' => null,
+                'provinceCounts' => collect(),
+                'countyCounts' => collect(),
                 'error' => $error,
             ]);
         }
@@ -81,7 +91,7 @@ class MapController extends Controller
     {
         try {
             $points = DB::table('horeca_list')
-                ->where('horeca_list.province_id', $provinceCode) 
+                ->where('horeca_list.province_id', $provinceCode)
                 ->select(
                     'horeca_list.id',
                     'horeca_list.lat',
@@ -96,28 +106,6 @@ class MapController extends Controller
         } catch (\Throwable $e) {
             Log::error('خطا در بارگذاری نقاط استان: ' . $e->getMessage());
             return response()->json(['error' => 'Server Error'], 500);
-        }
-    }
-
-    public function generateQr(string $id)
-    {
-        try {
-            $place = DB::table('horeca_list')->where('id', $id)->first();
-
-            if (!$place) {
-                abort(404, 'مکان مورد نظر یافت نشد');
-            }
-
-            $geoUri = "geo:{$place->lat},{$place->lng}";
-
-            $qrCode = QrCode::size(250)
-                ->margin(1)
-                ->generate($geoUri);
-
-            return response($qrCode)->header('Content-Type', 'image/svg+xml');
-        } catch (\Throwable $e) {
-            Log::error("خطا در تولید کیوآرکد برای آیدی {$id}: " . $e->getMessage());
-            abort(500, 'خطا در تولید بارکد');
         }
     }
 }
