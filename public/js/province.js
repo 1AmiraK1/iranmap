@@ -1,4 +1,4 @@
-import { map } from './map.js';
+import { map, fitAndConstrain } from './map.js';
 import { states, mapConfig, styles, computeMaxZoomFromMin, isProvinceDisabled } from './config.js';
 import { UI } from './ui.js';
 import { provinceTooltipTemplate } from './templates.js';
@@ -8,7 +8,7 @@ import { renderPointsForProvince } from './point.js';
 export function navigateToProvince(feature, layer) {
     states.provincesLayer.resetStyle(layer);
     states.activeProvinceCode = feature.properties.shapeISO;
-    renderPointsForProvince(map, states, states.activeProvinceCode);
+    renderPointsForProvince(map, states.activeProvinceCode);
 
     UI.toggleBackButton(true);
     map.getPane('provinces').style.display = 'none';
@@ -52,17 +52,12 @@ export function navigateToProvince(feature, layer) {
     map.setMaxBounds(null);
 
     if (targetBounds.isValid()) {
-        map.flyToBounds(targetBounds, { duration: 0.25 });
-
-        map.once('moveend', () => {
-            if (states.activeProvinceCode !== feature.properties.shapeISO) return;
-
-            const idealMinZoom = map.getBoundsZoom(targetBounds);
-            const calculatedMaxZoom = computeMaxZoomFromMin(idealMinZoom, mapConfig.maxZoomForProvince);
-
-            map.setMinZoom(idealMinZoom);
-            map.setMaxZoom(calculatedMaxZoom);
-            map.setMaxBounds(targetBounds.pad(mapConfig.boundsPadding));
+        fitAndConstrain(targetBounds, {
+            animate: true,
+            baseMaxZoom: mapConfig.maxZoomForProvince,
+            onEnd: () => {
+                if (states.activeProvinceCode !== feature.properties.shapeISO) return;
+            }
         });
     }
 }

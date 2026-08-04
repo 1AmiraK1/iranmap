@@ -1,4 +1,3 @@
-{{-- resources/views/horeca/partials/heroca-card.blade.php --}}
 <div class="card-item">
     <div class="card mb-3">
         <div class="row g-0">

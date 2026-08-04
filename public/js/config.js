@@ -1,4 +1,4 @@
-export let states = {
+export const states = {
     provincesLayer: null,
     countyLayer: null,
     seaLayer: null,
@@ -16,6 +16,7 @@ export let states = {
     activeCountyBounds: null,
     countyDataCache: null,
     nationalBounds: null,
+    counts: { provinces: {}, counties: {} }
 }
 
 export const disabledConfig = {

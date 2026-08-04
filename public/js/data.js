@@ -12,12 +12,12 @@ const fetchGeoJSON = async (url) => {
 };
 
 export const loadMapData = async () => {
-    const [seasData, provincesData, countiesData, disabledData] = await Promise.all([
+    const [seasData, provincesData, countiesData, disabledData, horecaCards] = await Promise.all([
         fetchGeoJSON(`/assets/data/seas.geojson`),
         fetchGeoJSON(`/assets/data/provinces.geojson`),
         fetchGeoJSON(`/assets/data/counties.geojson`),
         fetchGeoJSON(`/assets/data/disabled.json`)
     ]);
 
-    return { seasData, provincesData, countiesData, disabledData };
+    return { seasData, provincesData, countiesData, disabledData, horecaCards };
 };

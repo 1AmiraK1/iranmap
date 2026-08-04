@@ -1,24 +1,13 @@
 import { pointPanelTemplate } from './templates.js';
 import { UI } from './ui.js';
+import { states } from './config.js';
 
 let allPoints = [];
+let fetchedProvinces = new Set();
+let pendingHighlightPointId = null;
 
 const ICON_WIDTH = 26;
 const ICON_HEIGHT = 34;
-
-export function setPointsData(cards) {
-    allPoints = (cards || [])
-        .filter(card => card.lat != null && card.lng != null)
-        .map(card => ({
-            id: String(card.id),
-            name: card.title,
-            address: card.address,
-            lat: Number(card.lat),
-            lng: Number(card.lng),
-            provinceCode: card.province_id,
-            countyShapeId: String(card.county_id ?? '')
-        }));
-}
 
 function createPoiIcon() {
     return L.divIcon({
@@ -39,14 +28,14 @@ function setMarkerActiveStyle(marker, active) {
     }
 }
 
-function pinMarker(states, marker) {
+function pinMarker(marker) {
     marker._pinned = true;
     setMarkerActiveStyle(marker, true);
     states.activePointMarker = marker;
-    UI.showPointPanel(pointPanelTemplate(marker._pointData), () => unpinMarker(states, marker));
+    UI.showPointPanel(pointPanelTemplate(marker._pointData), () => unpinMarker(marker));
 }
 
-function unpinMarker(states, marker) {
+function unpinMarker(marker) {
     marker._pinned = false;
     setMarkerActiveStyle(marker, false);
     if (states.activePointMarker === marker) {
@@ -55,13 +44,13 @@ function unpinMarker(states, marker) {
     UI.hidePointPanel();
 }
 
-export function unpinActivePoint(states) {
+export function unpinActivePoint() {
     if (states.activePointMarker) {
-        unpinMarker(states, states.activePointMarker);
+        unpinMarker(states.activePointMarker);
     }
 }
 
-function renderPoints(map, states, points) {
+function renderPoints(map, points) {
     if (states.pointLayer && map.hasLayer(states.pointLayer)) {
         map.removeLayer(states.pointLayer);
     }
@@ -98,35 +87,71 @@ function renderPoints(map, states, points) {
     states.pointLayer = L.layerGroup(markers).addTo(map);
 }
 
-export function clearPoints(map, states) {
-    renderPoints(map, states, []);
+export function clearPoints(map) {
+    renderPoints(map, []);
 }
 
-export function renderPointsForProvince(map, states, provinceCode) {
-    const filtered = allPoints.filter(point => point.provinceCode === provinceCode);
-    renderPoints(map, states, filtered);
+export async function renderPointsForProvince(map, provinceCode) {
+    if (!provinceCode) return;
+    const targetProv = String(provinceCode);
+
+    if (!fetchedProvinces.has(targetProv)) {
+        UI.showLoader();
+        try {
+            const response = await fetch(`/map-points/${targetProv}`);
+            if (response.ok) {
+                const data = await response.json();
+
+                const formattedPoints = data.filter(card => card.lat != null && card.lng != null).map(card => ({
+                    id: String(card.id),
+                    name: card.title,
+                    address: card.address,
+                    lat: Number(card.lat),
+                    lng: Number(card.lng),
+                    provinceCode: String(card.province_id),
+                    countyShapeId: String(card.county_id ?? '')
+                }));
+
+                allPoints = [...allPoints, ...formattedPoints];
+                fetchedProvinces.add(targetProv);
+            }
+        } catch (error) {
+            console.error('خطا در دریافت نقاط استان (AJAX):', error);
+        }
+        UI.hideLoader();
+    }
+    const filtered = allPoints.filter(point => String(point.provinceCode) === targetProv);
+    renderPoints(map, filtered);
+
+    if (pendingHighlightPointId) {
+        highlightPoint(map, pendingHighlightPointId);
+        pendingHighlightPointId = null;
+    }
 }
 
-export function renderPointsForCounty(map, states, countyShapeId) {
+export function renderPointsForCounty(map, countyShapeId) {
     const targetId = String(countyShapeId);
     const filtered = allPoints.filter(point => point.countyShapeId === targetId);
-    renderPoints(map, states, filtered);
+    renderPoints(map, filtered);
 }
 
-export function highlightPoint(map, states, pointId) {
-    if (!states.pointMarkers) return null;
+export function highlightPoint(map, pointId) {
     const targetId = String(pointId);
-    const targetMarker = states.pointMarkers[targetId] || null;
+
+    if (!states.pointMarkers || !states.pointMarkers[targetId]) {
+        pendingHighlightPointId = targetId;
+        return null;
+    }
+
+    const targetMarker = states.pointMarkers[targetId];
 
     if (states.activePointMarker && states.activePointMarker !== targetMarker) {
-        unpinMarker(states, states.activePointMarker);
+        unpinMarker(states.activePointMarker);
     }
 
     if (targetMarker) {
-        pinMarker(states, targetMarker);
+        pinMarker(targetMarker);
         map.panTo(targetMarker.getLatLng(), { animate: true });
-    } else {
-        console.warn('نقطه‌ی مورد نظر برای هایلایت یافت نشد:', pointId);
     }
 
     return targetMarker;

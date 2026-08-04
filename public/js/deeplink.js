@@ -1,6 +1,7 @@
 import { navigateToProvince } from './province.js';
 import { navigateToCounty } from './county.js';
 import { highlightPoint } from './point.js';
+import { states } from './config.js';
 
 function findLayerByProperty(layerGroup, propName, value) {
     if (!layerGroup || value == null) return null;
@@ -14,8 +15,8 @@ function findLayerByProperty(layerGroup, propName, value) {
     return found;
 }
 
-export function applyInitialRoute(map, states) {
-    const initial = window.initialMapState;
+export function applyInitialRoute(map, initialMapState) {
+    const initial = initialMapState;
     if (!initial || !initial.provinceCode) {
         return { entered: false, enteredCounty: false };
     }
@@ -41,7 +42,7 @@ export function applyInitialRoute(map, states) {
     navigateToCounty(countyLayer.feature, countyLayer, {
         onReady: () => {
             if (initial.pointId) {
-                highlightPoint(map, states, initial.pointId);
+                highlightPoint(map, initial.pointId);
             }
         }
     });

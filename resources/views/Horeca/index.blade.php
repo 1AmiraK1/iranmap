@@ -46,16 +46,26 @@
     </div>
     <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/leaflet/leaflet.js') }}"></script>
-    <script>
-        window.horecaCards = @json($mapCardsJson);
-        window.initialMapState = {
-            pointId: @json($initialPoint),
-            provinceCode: @json($initialProvince),
-            countyShapeId: @json($initialCounty),
-        };
+
+    @php
+        $bootstrapData = [
+            'initialMapState' => [
+                'pointId' => $initialPoint,
+                'provinceCode' => $initialProvince,
+                'countyShapeId' => $initialCounty,
+            ],
+            'counts' => [
+                'provinces' => $provinceCounts,
+                'counties' => $countyCounts,
+            ],
+        ];
+    @endphp
+
+    <script type="application/json" id="map-bootstrap">
+    @json($bootstrapData, JSON_UNESCAPED_UNICODE)
     </script>
     <script type="module" src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/pagination.js') }}"></script>
+    <script src="{{ asset('js/events.js') }}"></script>
 </body>
 
 </html>

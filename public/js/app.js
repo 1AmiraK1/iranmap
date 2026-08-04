@@ -3,8 +3,7 @@ import { loadMapData } from './data.js';
 import { initLayers } from './layers.js';
 import { UI } from './ui.js';
 import { states, setDisabledConfig } from './config.js';
-import {refreshLabels} from './labels.js';
-import { setPointsData } from './point.js';
+import { refreshLabels } from './labels.js';
 import { applyInitialRoute } from './deeplink.js';
 
 map.createPane('seas');
@@ -20,7 +19,7 @@ map.createPane('mask');
 map.getPane('mask').style.zIndex = 460;
 
 map.createPane('labels');
-map.getPane('labels').style.zIndex=470;
+map.getPane('labels').style.zIndex = 470;
 map.getPane('labels').style.pointerEvents = 'none';
 
 map.createPane('points');
@@ -35,19 +34,30 @@ map.on('zoomend', () => {
     }, 120);
 });
 
+let bootstrapData = { initialMapState: {}, counts: { provinces: {}, counties: {} } };
+const bootstrapScriptElement = document.getElementById('map-bootstrap');
+
+if (bootstrapScriptElement) {
+    try {
+        bootstrapData = JSON.parse(bootstrapScriptElement.textContent);
+    } catch (error) {
+        console.error('خطا در پارس کردن داده‌های اولیه:', error);
+    }
+}
+
+const { initialMapState, counts } = bootstrapData;
+states.counts = counts;
+
 loadMapData().then(data => {
-    if (!data.provincesData) {
+    if (!data.provincesData || !data.seasData || !data.countiesData || !data.disabledData) {
+        UI.hideLoader();
         UI.showError('بارگذاری نقشه با خطا مواجه شد. لطفاً صفحه را رفرش کنید.');
         return;
     }
-    if (!data.seasData || !data.countiesData || !data.disabledData) {
-        console.warn('برخی داده‌های نقشه بارگذاری نشدند:', data);
-    }
     setDisabledConfig(data.disabledData);
-    setPointsData(window.horecaCards || []);
     initLayers(map, data);
 
-    const route = applyInitialRoute(map, states);
+    const route = applyInitialRoute(map, initialMapState);
 
     if (!route.enteredCounty) {
         setTimeout(() => UI.hideLoader(), 500);
@@ -59,6 +69,10 @@ loadMapData().then(data => {
             refreshLabels(map, states.countyLabelsLayer);
         });
     }
+}).catch(error => {
+    console.error('خطای بحرانی در راه‌اندازی نقشه:', error);
+    UI.hideLoader();
+    UI.showError('خطایی در اجرای نقشه رخ داد. لطفاً صفحه را رفرش کنید.');
 });
 
 UI.setupEventListeners({
@@ -98,31 +112,6 @@ UI.setupEventListeners({
             }
 
             mapHandlers.adjustMapAfterFullscreen(currentBounds);
-        });
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    const imageModal = document.getElementById('imageModal');
-    
-    if (imageModal) {
-        imageModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            
-            const qrUrl = button.getAttribute('data-bs-qr-url');
-            const cardTitle = button.getAttribute('data-bs-title');
-            
-            const modalImage = imageModal.querySelector('#modalQrImage');
-            const modalTitle = imageModal.querySelector('#modalTitle');
-            
-            modalImage.src = qrUrl;
-            if (modalTitle) {
-                modalTitle.textContent = cardTitle;
-            }
-        });
-        
-        imageModal.addEventListener('hidden.bs.modal', function () {
-            imageModal.querySelector('#modalQrImage').src = '';
         });
     }
 });

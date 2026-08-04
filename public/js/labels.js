@@ -4,6 +4,15 @@ const WIDTH_RATIO = 0.85;
 const HEIGHT_RATIO = 0.6;
 const FONT_WEIGHT = 700;
 
+const CUSTOM_OFFSETS = {
+    'هرمزگان': [0.6, 0],   
+    'بوشهر': [0.0, 0.1],  
+    'مرکزی': [0.0, -0.3],  
+    'تهران': [0.0, -0.2],  
+    'Karaj': [0.0, -0.05],  
+    'آذربایجان غربی': [0.1, -0.3],  
+};
+
 const measureCanvas = document.createElement('canvas');
 const measureCtx = measureCanvas.getContext('2d');
 
@@ -54,20 +63,11 @@ function getShapeCenter(polygonLayer) {
 
     if (center && polygonLayer.feature && polygonLayer.feature.properties) {
         const provinceName = polygonLayer.feature.properties.shapeName;
-
-        const customOffsets = {
-            'هرمزگان': [0.6, 0],   
-            'بوشهر': [0.0, 0.1],  
-            'مرکزی': [0.0, -0.3],  
-            'تهران': [0.0, -0.2],  
-            'Karaj': [0.0, -0.05],  
-            'آذربایجان غربی': [0.1, -0.3],  
-        };
-
-        if (customOffsets[provinceName]) {
+        
+        if (CUSTOM_OFFSETS[provinceName]) {
             return L.latLng(
-                center.lat + customOffsets[provinceName][0],
-                center.lng + customOffsets[provinceName][1]
+                center.lat + CUSTOM_OFFSETS[provinceName][0],
+                center.lng + CUSTOM_OFFSETS[provinceName][1]
             );
         }
     }
@@ -81,22 +81,6 @@ function getLabelFontFamily() {
         cachedFontFamily = getComputedStyle(document.body).fontFamily || 'Tahoma, sans-serif';
     }
     return cachedFontFamily;
-}
-
-export function fitLabel(map, marker) {
-    const el = marker.getElement();
-    if (!el) return;
-    const span = el.querySelector('span');
-    if (!span) return;
-
-    const { width, height } = getPixelSize(map, marker._boundPolygon.getBounds());
-    const fontFamily = getLabelFontFamily();
-
-    let fontSize = bestFontSize(marker._labelText, width * WIDTH_RATIO, height * HEIGHT_RATIO, fontFamily);
-    if (fontSize < MIN_FONT_SIZE) fontSize = MIN_FONT_SIZE;
-
-    el.style.display = 'flex';
-    span.style.fontSize = `${fontSize}px`;
 }
 
 export function createNameLabel(map, polygonLayer, name, className = '') {

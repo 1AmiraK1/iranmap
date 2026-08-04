@@ -338,11 +338,6 @@ body {
     justify-content: center;
 }
 
-.card-info {
-    display: flex;
-    justify-content: center;
-}
-
 #cardsListContainer.is-loading {
     opacity: .5;
     pointer-events: none;

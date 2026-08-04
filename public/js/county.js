@@ -1,6 +1,6 @@
 import { states, mapConfig, styles, isCountyDisabled } from './config.js';
 import { countyTooltipTemplate } from './templates.js';
-import { map } from './map.js';
+import { map, fitAndConstrain } from './map.js';
 import { UI } from './ui.js';
 import { renderPointsForCounty } from './point.js';
 
@@ -40,15 +40,50 @@ export function navigateToCounty(feature, layer, options = {}) {
     states.activeCountyName = feature.properties.shapeName;
     states.activeCountyShapeId = targetCountyShapeId;
     states.activeCountyBounds = countyBounds;
-    renderPointsForCounty(map, states, targetCountyShapeId);
+    renderPointsForCounty(map, targetCountyShapeId);
     UI.showCountyLabel(feature.properties.shapeName);
 
-    map.setMinZoom(0);
-    map.setMaxZoom(mapConfig.maxZoomForCity);
-    map.setMaxBounds(null);
+    fitAndConstrain(countyBounds, {
+        animate: true,
+        exactMaxZoom: mapConfig.maxZoomForCity,
+        onEnd: (cityMinZoom) => {
+            if (states.activeCountyShapeId !== targetCountyShapeId) return;
 
-    map.flyToBounds(countyBounds, {
-        duration: 0.25
+            const provinceCode = states.activeProvinceCode;
+            const tileUrl = `/tiles/${encodeURIComponent(provinceCode)}/{z}/{x}/{y}.png`;
+
+            let isTileLoaded = false;
+
+            const finishTileLoading = () => {
+                if (isTileLoaded) return;
+                isTileLoaded = true;
+                if (states.activeCountyShapeId !== targetCountyShapeId) return;
+                UI.hideLoader();
+                if (typeof onReady === 'function') onReady();
+            };
+
+            if (!states.cityTileLayer) {
+                states.cityTileLayer = L.tileLayer(tileUrl, {
+                    maxZoom: mapConfig.maxZoomForCity,
+                    minNativeZoom: mapConfig.tileNativeZoom,
+                    maxNativeZoom: mapConfig.tileNativeZoom,
+                    className: 'city-tiles'
+                });
+            } else {
+                states.cityTileLayer.off('load');
+                states.cityTileLayer.off('tileerror');
+                states.cityTileLayer.setUrl(tileUrl);
+            }
+
+            states.cityTileLayer.once('load', finishTileLoading);
+            states.cityTileLayer.once('tileerror', finishTileLoading);
+
+            if (!map.hasLayer(states.cityTileLayer)) {
+                map.addLayer(states.cityTileLayer);
+            }
+
+            setTimeout(finishTileLoading, 400);
+        }
     });
 
     requestAnimationFrame(() => {
@@ -67,46 +102,6 @@ export function navigateToCounty(feature, layer, options = {}) {
             style: styles.mask,
             renderer: L.canvas({ padding: 0.5 })
         }).addTo(map);
-    });
-
-    map.once('moveend', () => {
-        if (states.activeCountyShapeId !== targetCountyShapeId) return;
-        const cityMinZoom = map.getBoundsZoom(countyBounds);
-        map.setMinZoom(cityMinZoom);
-        map.setMaxBounds(countyBounds.pad(mapConfig.boundsPadding));
-
-        const provinceCode = states.activeProvinceCode;
-        const tileUrl = `/tiles/${encodeURIComponent(provinceCode)}/{z}/{x}/{y}.png`;
-
-        const finishTileLoading = () => {
-            if (states.activeCountyShapeId !== targetCountyShapeId) return;
-            UI.hideLoader();
-            if (typeof onReady === 'function') onReady();
-        };
-
-        if (!states.cityTileLayer) {
-            states.cityTileLayer = L.tileLayer(tileUrl, {
-                maxZoom: mapConfig.maxZoomForCity,
-                minNativeZoom: mapConfig.tileNativeZoom,
-                maxNativeZoom: mapConfig.tileNativeZoom,
-                className: 'city-tiles'
-            });
-        } else {
-            states.cityTileLayer.off('load');
-            states.cityTileLayer.setUrl(tileUrl);
-        }
-
-        states.cityTileLayer.once('load', finishTileLoading);
-
-        if (!map.hasLayer(states.cityTileLayer)) {
-            map.addLayer(states.cityTileLayer);
-        }
-
-        setTimeout(() => {
-            if (states.cityTileLayer._loading === false) {
-                finishTileLoading();
-            }
-        }, 0);
     });
 }
 
