@@ -16,6 +16,7 @@
         <div class="list-section">
             <div class="search-section d-flex justify-content-center">
                 <h1>Map</h1>
+                @include('horeca.partials.search-form')
             </div>
             <hr>
             <div class="list-items p-2" id="cardsListContainer">
