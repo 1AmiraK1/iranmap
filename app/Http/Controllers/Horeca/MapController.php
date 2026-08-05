@@ -27,6 +27,10 @@ class MapController extends Controller
                 )
                 ->orderBy('horeca_list.id');
 
+            if (!empty($point)) {
+                $baseQuery->where('horeca_list.id', (int) $point);
+            }
+            
             $cards = (clone $baseQuery)
                 ->paginate($this->perPage)
                 ->appends(request()->query());
@@ -37,12 +41,12 @@ class MapController extends Controller
 
             $provinceCounts = Cache::remember('province_counts', 86400, function () {
                 return DB::table('horeca_list')
-                ->whereNotNull('province_id')
-                ->whereNotNull('lat')
-                ->whereNotNull('lng')
-                ->groupBy('province_id')
-                ->select('province_id', DB::raw('count(*) as count'))
-                ->pluck('count', 'province_id');
+                    ->whereNotNull('province_id')
+                    ->whereNotNull('lat')
+                    ->whereNotNull('lng')
+                    ->groupBy('province_id')
+                    ->select('province_id', DB::raw('count(*) as count'))
+                    ->pluck('count', 'province_id');
             });
 
             $countyCounts = Cache::remember('county_counts', 86400, function () {
@@ -51,8 +55,8 @@ class MapController extends Controller
                     ->whereNotNull('lat')
                     ->whereNotNull('lng')
                     ->groupBy('county_id')
-                ->select('county_id', DB::raw('count(*) as count'))
-                ->pluck('count', 'county_id');
+                    ->select('county_id', DB::raw('count(*) as count'))
+                    ->pluck('count', 'county_id');
             });
 
             return view('horeca.index', [

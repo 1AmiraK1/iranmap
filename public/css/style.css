@@ -361,3 +361,12 @@ body {
     pointer-events: none;
     transition: opacity 0.15s ease;
 }
+
+.card-item {
+    transition: opacity .25s ease, transform .25s ease;
+}
+.card-item--fading-out {
+    opacity: 0;
+    transform: scale(.96);
+    pointer-events: none;
+}
