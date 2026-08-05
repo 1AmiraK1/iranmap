@@ -1,21 +1,21 @@
 @font-face {
-    font-family: 'Vazirmatn';
-    src: url("../assets/font/Vazirmatn[wght].woff2") format('woff2');
+    font-family: "Vazirmatn";
+    src: url("../assets/font/Vazirmatn[wght].woff2") format("woff2");
     font-weight: 100 900;
     font-style: normal;
     font-display: swap;
 }
 
 :root {
-    --province-fill: #FFFAF3;
+    --province-fill: #fffaf3;
     --province-border: #b6b6b6;
     --province-hover: #ff9800;
 
-    --county-fill: #FFFAF3;
+    --county-fill: #fffaf3;
     --county-border: #0000002a;
     --county-hover: #ff9800;
 
-    --sea-fill: #4274D9;
+    --sea-fill: #4274d9;
     --sea-border: #999999;
 
     --poi-fill: #e72134;
@@ -24,7 +24,7 @@
 }
 
 * {
-    font-family: 'Vazirmatn';
+    font-family: "Vazirmatn";
 }
 
 html,
@@ -35,11 +35,11 @@ body {
     height: 100%;
 }
 
-.list-section{
-    width: 30%;
+.list-section {
+    width: 40%;
 }
 .map-section {
-    width: 70%;
+    width: 60%;
 }
 
 #map-wrapper {
@@ -208,7 +208,7 @@ body {
     width: 3vw;
     height: 3vw;
     border: 8px solid rgba(0, 0, 0, 0.15);
-    border-top-color: #19368E;
+    border-top-color: #19368e;
     border-radius: 50%;
     animation: spinner 0.8s linear infinite;
 }
@@ -234,27 +234,29 @@ body {
 
 .poi-marker-shape {
     position: relative;
-    width: 30px; 
-    height: 38px; 
-    background-color: #1f0000;               
-    -webkit-mask: url('../assets/images/svg/map-pin.svg') no-repeat center / 100% 100%;
-            mask: url('../assets/images/svg/map-pin.svg') no-repeat center / 100% 100%;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)); 
-    transition: transform .15s ease;
+    width: 30px;
+    height: 38px;
+    background-color: #1f0000;
+    -webkit-mask: url("../assets/images/svg/map-pin.svg") no-repeat center /
+        100% 100%;
+    mask: url("../assets/images/svg/map-pin.svg") no-repeat center / 100% 100%;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+    transition: transform 0.15s ease;
     transform-origin: bottom center;
 }
 
 .poi-marker-shape::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 2px;
     right: 1%;
     bottom: 2px;
     left: 2px;
-    background-color: var(--poi-fill);     
-    -webkit-mask: url('../assets/images/svg/map-pin.svg') no-repeat center / 100% 100%;
-            mask: url('../assets/images/svg/map-pin.svg') no-repeat center / 100% 100%;
-    transition: background-color .15s ease;
+    background-color: var(--poi-fill);
+    -webkit-mask: url("../assets/images/svg/map-pin.svg") no-repeat center /
+        100% 100%;
+    mask: url("../assets/images/svg/map-pin.svg") no-repeat center / 100% 100%;
+    transition: background-color 0.15s ease;
 }
 
 .poi-marker:hover .poi-marker-shape,
@@ -301,7 +303,7 @@ body {
 }
 
 .active-point-panel-close:hover {
-    color: #19368E;
+    color: #19368e;
 }
 
 .point-panel-content {
@@ -311,7 +313,7 @@ body {
 }
 
 .point-panel-content b {
-    color: #19368E;
+    color: #19368e;
     font-size: 13px;
 }
 
@@ -327,19 +329,35 @@ body {
 }
 
 /* Cards */
+.card-links {
+    color: inherit;
+    text-decoration: none;
+}
+
 .card-type {
     position: absolute;
-    top: 0;
-    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 .card-info {
     display: flex;
     justify-content: center;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+
+.card-info:hover {
+    background-color: #bb2d3b !important;
+    border-color: #b02a37;
+    color: white;
 }
 
 #cardsListContainer.is-loading {
-    opacity: .5;
+    opacity: 0.5;
     pointer-events: none;
-    transition: opacity .15s ease;
+    transition: opacity 0.15s ease;
 }
