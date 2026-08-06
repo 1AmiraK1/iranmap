@@ -3,6 +3,7 @@ import { countyTooltipTemplate } from './templates.js';
 import { map, fitAndConstrain } from './map.js';
 import { UI } from './ui.js';
 import { renderPointsForCounty } from './point.js';
+import { updateCardsList } from './list.js';
 
 function createMaskFeature(feature) {
     const outerRing = [
@@ -29,7 +30,7 @@ function createMaskFeature(feature) {
 }
 
 export function navigateToCounty(feature, layer, options = {}) {
-    const { onReady } = options;
+    const { onReady, skipListUpdate } = options;
 
     UI.showLoader('در حال بارگذاری شهر...');
 
@@ -40,6 +41,9 @@ export function navigateToCounty(feature, layer, options = {}) {
     states.activeCountyName = feature.properties.shapeName;
     states.activeCountyShapeId = targetCountyShapeId;
     states.activeCountyBounds = countyBounds;
+    if (!skipListUpdate) {
+        updateCardsList(`/map/${states.activeProvinceCode}/${targetCountyShapeId}`);
+    }
     renderPointsForCounty(map, targetCountyShapeId);
     UI.showCountyLabel(feature.properties.shapeName);
 

@@ -4,11 +4,14 @@ import { UI } from './ui.js';
 import { provinceTooltipTemplate } from './templates.js';
 import { createNameLabel, refreshLabels } from './labels.js';
 import { renderPointsForProvince } from './point.js';
+import { updateCardsList } from './list.js';
 
-export function navigateToProvince(feature, layer) {
+export function navigateToProvince(feature, layer, options = {}) {
     states.provincesLayer.resetStyle(layer);
     states.activeProvinceCode = feature.properties.shapeISO;
-    
+    if (!options.skipListUpdate) {
+        updateCardsList(`/map/${states.activeProvinceCode}`);
+    }
     const pointsPromise = renderPointsForProvince(map, states.activeProvinceCode);
 
     UI.toggleBackButton(true);

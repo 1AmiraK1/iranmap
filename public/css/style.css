@@ -260,11 +260,13 @@ body {
 }
 
 .poi-marker:hover .poi-marker-shape,
+.poi-marker--hover .poi-marker-shape,
 .poi-marker--active .poi-marker-shape {
     transform: scale(1.15);
 }
 
 .poi-marker:hover .poi-marker-shape::after,
+.poi-marker--hover .poi-marker-shape::after,
 .poi-marker--active .poi-marker-shape::after {
     background-color: var(--poi-hover);
 }

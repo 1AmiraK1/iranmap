@@ -1,4 +1,4 @@
-<div class="card-item shadow">
+<div class="card-item shadow" data-point-id="{{ $card->id }}" data-county-id="{{ $card->county_id }}">
     <div class="card mb-3">
         <div class="row g-0">
             <div class="col-md-4">
@@ -6,7 +6,7 @@
                     'province' => $card->province_id,
                     'county' => $card->county_id,
                     'point' => $card->id,
-                ]) }}"
+                ]) }}?{{ request()->getQueryString() }}"
                     class="card-links">
                     <img src="{{ $card->main_image ? asset('assets/images/horeca/' . $card->main_image) : asset('assets/images/test.jpg') }}"
                         class="img-fluid mx-auto rounded-start w-100 object-fit-cover" alt="{{ $card->title }}"
@@ -23,7 +23,7 @@
                     'province' => $card->province_id,
                     'county' => $card->county_id,
                     'point' => $card->id,
-                ]) }}"
+                ]) }}?{{ request()->getQueryString() }}"
                     class="card-links">
                     <div class="card-body d-flex flex-column h-100 justify-content-between p-2">
                         <h5 class="card-title">{{ $card->title }}</h5>

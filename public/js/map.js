@@ -1,6 +1,7 @@
 import { mapConfig, states, computeMaxZoomFromMin } from './config.js';
 import { UI } from './ui.js';
 import { clearPoints, renderPointsForProvince, unpinActivePoint } from './point.js';
+import { updateCardsList } from './list.js';
 
 export const map = L.map('map', {
     zoomControl: false,
@@ -38,6 +39,7 @@ export const mapHandlers = {
     },
 
     resetToNationalBounds: () => {
+        updateCardsList('/');
         UI.hideCountyLabel();
         UI.hideLoader();
         if (states.countyLayer) states.countyLayer.clearLayers();
@@ -75,6 +77,9 @@ export const mapHandlers = {
     },
 
     resetToProvinceBounds: () => {
+        if (states.activeProvinceCode) {
+            updateCardsList(`/map/${states.activeProvinceCode}`); 
+        }
         UI.hideCountyLabel();
         UI.hideLoader();
         if (states.maskLayer && map.hasLayer(states.maskLayer)) {
@@ -136,7 +141,7 @@ export function fitAndConstrain(bounds, options = {}) {
     if (!bounds || typeof bounds.isValid !== 'function' || !bounds.isValid()) return null;
 
     map.setMinZoom(0);
-    map.setMaxZoom(mapConfig.maxZoomForCity); 
+    map.setMaxZoom(mapConfig.maxZoomForCity);
     map.setMaxBounds(null);
 
     const targetMinZoom = map.getBoundsZoom(bounds);

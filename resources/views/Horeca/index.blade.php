@@ -51,7 +51,7 @@
     @json($bootstrapData, JSON_UNESCAPED_UNICODE)
     </script>
     <script type="module" src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/events.js') }}"></script>
+    <script type="module" src="{{ asset('js/events.js') }}"></script>
 </body>
 
 </html>

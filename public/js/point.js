@@ -31,6 +31,7 @@ function setMarkerActiveStyle(marker, active) {
 
 function pinMarker(marker) {
     marker._pinned = true;
+    marker.setZIndexOffset(2000);
     setMarkerActiveStyle(marker, true);
     states.activePointMarker = marker;
     UI.showPointPanel(pointPanelTemplate(marker._pointData), () => unpinMarker(marker));
@@ -38,6 +39,7 @@ function pinMarker(marker) {
 
 function unpinMarker(marker) {
     marker._pinned = false;
+    marker.setZIndexOffset(0);
     setMarkerActiveStyle(marker, false);
     if (states.activePointMarker === marker) {
         states.activePointMarker = null;

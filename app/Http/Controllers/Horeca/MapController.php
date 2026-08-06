@@ -24,13 +24,14 @@ class MapController extends Controller
                     'horeca_list.*',
                     'horeca_images.image_path as main_image',
                     'horeca_types.type_title'
-                )
-                ->orderBy('horeca_list.id');
-
-            if (!empty($point)) {
-                $baseQuery->where('horeca_list.id', (int) $point);
+                );
+            if ($province) {
+                $baseQuery->where('horeca_list.province_id', $province);
             }
-            
+            if ($county) {
+                $baseQuery->where('horeca_list.county_id', $county);
+            }
+
             $cards = (clone $baseQuery)
                 ->paginate($this->perPage)
                 ->appends(request()->query());
@@ -76,7 +77,7 @@ class MapController extends Controller
                 return view('horeca.partials.cards-list', [
                     'cards' => $emptyCards,
                     'error' => $error,
-                ]);
+                ], 500);
             }
 
             return view('horeca.index', [
