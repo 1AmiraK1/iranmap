@@ -96,7 +96,7 @@ UI.setupEventListeners({
 
     onFullscreenChange: (isFullscreen) => {
         const title = isFullscreen ? "خروج از تمام صفحه" : "تمام صفحه";
-        const iconPath = isFullscreen ? `../assets/images/svg/exit-fullscreen.svg` : `../assets/images/svg/fullscreen.svg`;
+        const iconPath = isFullscreen ? `/assets/images/svg/exit-fullscreen.svg` : `/assets/images/svg/fullscreen.svg`;
         UI.changeFullscreenIcon(iconPath);
         UI.updateFullscreenTooltip(title);
 

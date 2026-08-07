@@ -39,6 +39,7 @@ export const mapHandlers = {
     },
 
     resetToNationalBounds: () => {
+        map.dragging.enable();
         updateCardsList('/');
         UI.hideCountyLabel();
         UI.hideLoader();
@@ -77,6 +78,7 @@ export const mapHandlers = {
     },
 
     resetToProvinceBounds: () => {
+        map.dragging.enable();
         if (states.activeProvinceCode) {
             updateCardsList(`/map/${states.activeProvinceCode}`); 
         }
@@ -168,7 +170,6 @@ export function fitAndConstrain(bounds, options = {}) {
     };
 
     if (animate) {
-        map.on('moveend', applyConstraints);
         map.flyToBounds(bounds, { duration: 0.25 });
         map.once('moveend', applyConstraints);
         setTimeout(applyConstraints, 350);

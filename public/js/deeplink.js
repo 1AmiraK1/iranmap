@@ -3,7 +3,7 @@ import { navigateToCounty } from './county.js';
 import { highlightPoint } from './point.js';
 import { states } from './config.js';
 
-function findLayerByProperty(layerGroup, propName, value) {
+export function findLayerByProperty(layerGroup, propName, value) {
     if (!layerGroup || value == null) return null;
     let found = null;
     layerGroup.eachLayer((layer) => {
@@ -15,38 +15,55 @@ function findLayerByProperty(layerGroup, propName, value) {
     return found;
 }
 
-export async function applyInitialRoute(map, initialMapState) {
-    const initial = initialMapState;
-    if (!initial || !initial.provinceCode) {
+export async function navigateToPoint(map, { provinceCode, countyShapeId, pointId, skipListUpdate = false } = {}) {
+    if (!provinceCode) {
         return { entered: false, enteredCounty: false };
     }
 
-    const provinceLayer = findLayerByProperty(states.provincesLayer, 'shapeISO', initial.provinceCode);
-    if (!provinceLayer) {
-        console.warn('استان مورد نظر در URL یافت نشد:', initial.provinceCode);
-        return { entered: false, enteredCounty: false };
-    }
-
-    await navigateToProvince(provinceLayer.feature, provinceLayer, { skipListUpdate: true });
-
-    if (!initial.countyShapeId) {
-        return { entered: true, enteredCounty: false };
-    }
-
-    const countyLayer = findLayerByProperty(states.countyLayer, 'shapeID', initial.countyShapeId);
-    if (!countyLayer) {
-        console.warn('شهرستان مورد نظر در URL یافت نشد:', initial.countyShapeId);
-        return { entered: true, enteredCounty: false };
-    }
-
-    navigateToCounty(countyLayer.feature, countyLayer, {
-        skipListUpdate: true,
-        onReady: () => {
-            if (initial.pointId) {
-                highlightPoint(map, initial.pointId);
-            }
+    if (states.activeProvinceCode !== provinceCode) {
+        const provinceLayer = findLayerByProperty(states.provincesLayer, 'shapeISO', provinceCode);
+        if (!provinceLayer) {
+            console.warn('استان مورد نظر یافت نشد:', provinceCode);
+            return { entered: false, enteredCounty: false };
         }
-    });
+        await navigateToProvince(provinceLayer.feature, provinceLayer, { skipListUpdate: true });
+    }
 
+    if (!countyShapeId) {
+        if (pointId) highlightPoint(map, pointId);
+        return { entered: true, enteredCounty: false };
+    }
+
+    if (states.activeCountyShapeId !== countyShapeId) {
+        const countyLayer = findLayerByProperty(states.countyLayer, 'shapeID', countyShapeId);
+        if (!countyLayer) {
+            console.warn('شهرستان مورد نظر یافت نشد:', countyShapeId);
+            if (pointId) highlightPoint(map, pointId);
+            return { entered: true, enteredCounty: false };
+        }
+
+        await navigateToCounty(countyLayer.feature, countyLayer, {
+            skipListUpdate,
+            onReady: () => {
+                if (pointId) highlightPoint(map, pointId);
+            }
+        });
+
+        return { entered: true, enteredCounty: true };
+    }
+
+    if (pointId) highlightPoint(map, pointId);
     return { entered: true, enteredCounty: true };
+}
+
+export async function applyInitialRoute(map, initialMapState) {
+    if (!initialMapState || !initialMapState.provinceCode) {
+        return { entered: false, enteredCounty: false };
+    }
+    return navigateToPoint(map, {
+        provinceCode: initialMapState.provinceCode,
+        countyShapeId: initialMapState.countyShapeId,
+        pointId: initialMapState.pointId,
+        skipListUpdate: true
+    });
 }

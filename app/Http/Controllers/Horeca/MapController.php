@@ -24,12 +24,24 @@ class MapController extends Controller
                     'horeca_list.*',
                     'horeca_images.image_path as main_image',
                     'horeca_types.type_title'
-                );
+                )
+                ->orderBy('horeca_list.id');
             if ($province) {
                 $baseQuery->where('horeca_list.province_id', $province);
             }
             if ($county) {
                 $baseQuery->where('horeca_list.county_id', $county);
+            }
+
+            if ($point && !request()->has('page')) {
+                $ids = (clone $baseQuery)->pluck('horeca_list.id');
+                $position = $ids->search(function ($id) use ($point) {
+                    return (string) $id === (string) $point;
+                });
+                if ($position !== false) {
+                    $page = intdiv($position, $this->perPage) + 1;
+                    request()->merge(['page' => $page]);
+                }
             }
 
             $cards = (clone $baseQuery)

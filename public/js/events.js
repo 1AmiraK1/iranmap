@@ -1,7 +1,9 @@
 import { states } from './config.js';
 import { highlightPoint } from './point.js';
 import { updateCardsList } from './list.js';
-import { map } from './map.js';
+import { map, mapHandlers } from './map.js';
+import { navigateToPoint } from './deeplink.js';
+import { UI } from './ui.js';
 
 //qrcode
 document.addEventListener('DOMContentLoaded', function () {
@@ -44,13 +46,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
         var card = e.target.closest('.card-item');
         if (card) {
-            var cardLink = e.target.closest('a'); 
-            
+            var cardLink = e.target.closest('a');
+
             if (cardLink && container.contains(cardLink)) {
-                e.preventDefault(); 
+                e.preventDefault();
                 window.history.pushState({}, '', cardLink.href);
+
                 const pointId = card.getAttribute('data-point-id');
-                if (pointId) {
+                const provinceCode = card.getAttribute('data-province-id');
+                const countyShapeId = card.getAttribute('data-county-id');
+                const listUrl = countyShapeId
+                    ? `/map/${encodeURIComponent(provinceCode)}/${encodeURIComponent(countyShapeId)}/${encodeURIComponent(pointId)}`
+                    : `/map/${encodeURIComponent(provinceCode)}`;
+                updateCardsList(listUrl, true);
+                if (provinceCode) {
+                    navigateToPoint(map, {
+                        provinceCode,
+                        countyShapeId,
+                        pointId,
+                        skipListUpdate: true
+                    });
+                } else if (pointId) {
                     highlightPoint(map, pointId);
                 }
             }
@@ -58,44 +74,61 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     window.addEventListener('popstate', function () {
-        updateCardsList(window.location.href, true);
+        const parts = window.location.pathname.split('/').filter(Boolean);
+        if (parts[0] === 'map' && parts[1]) {
+            const listUrl = window.location.pathname;
+            updateCardsList(listUrl, true);
+
+            navigateToPoint(map, {
+                provinceCode: parts[1],
+                countyShapeId: parts[2] || null,
+                pointId: parts[3] || null,
+                skipListUpdate: true
+            });
+        } else {
+            updateCardsList('/', true);
+            UI.toggleBackButton(false);
+            UI.fadeMap(() => {
+                mapHandlers.resetToNationalBounds();
+            });
+        }
     });
 });
 
 //card hover
 const container = document.getElementById('cardsListContainer');
 if (container) {
-    container.addEventListener('mouseover', function(e) {
+    container.addEventListener('mouseover', function (e) {
         const card = e.target.closest('.card-item');
         if (!card) return;
 
         const pointId = card.getAttribute('data-point-id');
-        
+
         if (pointId && states.pointMarkers && states.pointMarkers[pointId]) {
             const marker = states.pointMarkers[pointId];
-            const markerEl = marker.getElement(); 
-            
+            const markerEl = marker.getElement();
+
             if (markerEl) {
                 markerEl.classList.add('poi-marker--hover');
-                marker.setZIndexOffset(1000); 
+                marker.setZIndexOffset(1000);
             }
         }
     });
 
-    container.addEventListener('mouseout', function(e) {
+    container.addEventListener('mouseout', function (e) {
         const card = e.target.closest('.card-item');
         if (!card) return;
 
         const pointId = card.getAttribute('data-point-id');
-        
+
         if (pointId && states.pointMarkers && states.pointMarkers[pointId]) {
             const marker = states.pointMarkers[pointId];
             const markerEl = marker.getElement();
-            
+
             if (markerEl) {
                 markerEl.classList.remove('poi-marker--hover');
                 if (!marker._pinned) {
-                    marker.setZIndexOffset(0); 
+                    marker.setZIndexOffset(0);
                 }
             }
         }

@@ -33,7 +33,7 @@ export function navigateToCounty(feature, layer, options = {}) {
     const { onReady, skipListUpdate } = options;
 
     UI.showLoader('در حال بارگذاری شهر...');
-
+    map.dragging.disable();
     states.countyLayer.resetStyle(layer);
     const countyBounds = layer.getBounds();
     const targetCountyShapeId = feature.properties.shapeID;
@@ -70,7 +70,10 @@ export function navigateToCounty(feature, layer, options = {}) {
                     maxZoom: mapConfig.maxZoomForCity,
                     minNativeZoom: mapConfig.tileNativeZoom,
                     maxNativeZoom: mapConfig.tileNativeZoom,
-                    className: 'city-tiles'
+                    className: 'city-tiles',
+                    updateWhenIdle: true,
+                    updateWhenZooming: false,
+                    keepBuffer: 0
                 });
             } else {
                 states.cityTileLayer.off('load');
