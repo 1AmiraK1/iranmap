@@ -330,6 +330,11 @@ body {
     }
 }
 
+/* Search Form */
+.form-floating>label{
+    right: 15px;
+}
+
 /* Cards */
 .card-links {
     color: inherit;
@@ -338,8 +343,8 @@ body {
 
 .card-type {
     position: absolute;
-    bottom: 0;
-    left: 0;
+    top: 0;
+    right: 0;
 }
 
 .card-info {
@@ -347,8 +352,7 @@ body {
     justify-content: center;
     position: absolute;
     bottom: 0;
-    right: 0;
-    transform: translateX(-50%);
+    left: 0;
     cursor: pointer;
 }
 

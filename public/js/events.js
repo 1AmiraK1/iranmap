@@ -134,3 +134,17 @@ if (container) {
         }
     });
 }
+
+//Search Form
+document.addEventListener('DOMContentLoaded', function () {
+    const searchForm = document.getElementById('search-form');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(searchForm);
+            console.log(Object.fromEntries(formData));
+            const addressInput = e.target.elements.address;
+            updateCardsList('/map-search/{province?}/{county?}/{title?}/{address?}');
+        });
+    }
+});

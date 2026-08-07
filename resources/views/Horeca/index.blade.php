@@ -13,13 +13,13 @@
 
 <body>
     <div class="container-fluid d-flex p-0">
-        <div class="list-section">
-            <div class="search-section d-flex justify-content-center">
-                <h1>Map</h1>
+        <div class="list-section p-4">
+            <div class="search-section">
+                <h1>Iran Map</h1>
                 @include('horeca.partials.search-form')
             </div>
             <hr>
-            <div class="list-items p-2" id="cardsListContainer">
+            <div class="list-items" id="cardsListContainer">
                 @include('horeca.partials.cards-list', ['cards' => $cards])
             </div>
         </div>

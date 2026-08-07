@@ -1,4 +1,4 @@
-<div class="card-item shadow" data-point-id="{{ $card->id }}" data-province-id="{{ $card->province_id }}" data-county-id="{{ $card->county_id }}">    <div class="card mb-3">
+<div class="card-item" data-point-id="{{ $card->id }}" data-province-id="{{ $card->province_id }}" data-county-id="{{ $card->county_id }}">    <div class="card mb-3">
         <div class="row g-0">
             <div class="col-md-4">
                 <a href="{{ route('horeca.point.show', [
