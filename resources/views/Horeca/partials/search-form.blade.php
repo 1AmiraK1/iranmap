@@ -6,7 +6,7 @@
             <label for="title-search">اسم مرکز</label>
         </div>
         <div class="col form-floating">
-            <select class="form-select" aria-label="Default select example" name="type-search" id="type-search">
+            <select class="form-select" name="type-search" id="type-search">
                 <option selected value="">همه</option>
                 @isset($types)
                     @foreach ($types as $type)
@@ -19,7 +19,7 @@
     </div>
     <div class="row mb-3">
         <div class="col form-floating">
-            <select class="form-select" aria-label="Default select example" name="province-search" id="province-search">
+            <select class="form-select" name="province-search" id="province-search">
                 <option selected value="">همه</option>
                 @isset($provinces)
                     @foreach ($provinces as $province)
@@ -30,7 +30,7 @@
             <label for="province-search">استان</label>
         </div>
         <div class="col form-floating">
-            <select class="form-select" aria-label="Default select example" name="county-search" id="county-search">
+            <select class="form-select" name="county-search" id="county-search">
                 <option selected value="">همه</option>
                 @isset($counties)
                     @foreach ($counties as $county)

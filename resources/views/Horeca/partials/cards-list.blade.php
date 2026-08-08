@@ -4,7 +4,7 @@
     </div>
 @else
     @forelse ($cards as $card)
-        @include('horeca.partials.horeca-card', ['card' => $card])
+        @include('horeca.partials.card-item', ['card' => $card])
     @empty
         <p class="text-center text-muted mt-3">موردی برای نمایش وجود ندارد.</p>
     @endforelse

@@ -30,7 +30,7 @@ IR-27 | مازندران
 IR-28 | مرکزی
 IR-29 | هرمزگان
 IR-30 | همدان
-IR-30 | یزد
+IR-31 | یزد
 
 > place your tiles in this path: /storage/app/tiles/
 

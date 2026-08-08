@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <div class="container-fluid d-flex p-0">
+    <div class="container-fluid d-flex p-0" id="mainContainer">
         <div class="list-section p-4">
             <div class="search-section">
                 <h1>Iran Map</h1>
