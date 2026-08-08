@@ -77,6 +77,18 @@ class MapController extends Controller
                     ->get();
             });
 
+            $provinces = Cache::remember('provinces', 86400, function () {
+                return DB::table('provinces')
+                ->select('id','name')
+                ->get();
+            });
+
+            // $counties = Cache::remember('counties', 86400, function () {
+
+            //     return DB::select('CALL GetCitiesByProvince(?)', [$provinceId])
+            //     ->get();
+            // });
+
             return view('horeca.index', [
                 'cards' => $cards,
                 'initialProvince' => $province,
@@ -85,6 +97,7 @@ class MapController extends Controller
                 'provinceCounts' => $provinceCounts,
                 'countyCounts' => $countyCounts,
                 'types' => $types,
+                'provinces' => $provinces,
             ]);
         } catch (\Throwable $e) {
             Log::error('خطا در بارگذاری نقشه: ' . $e->getMessage());
