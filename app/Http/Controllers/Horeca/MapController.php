@@ -71,6 +71,11 @@ class MapController extends Controller
                     ->select('county_id', DB::raw('count(*) as count'))
                     ->pluck('count', 'county_id');
             });
+            
+            $types = Cache::remember('types', 86400, function () {
+                return DB::table('horeca_types')
+                    ->get();
+            });
 
             return view('horeca.index', [
                 'cards' => $cards,
@@ -79,6 +84,7 @@ class MapController extends Controller
                 'initialPoint' => $point,
                 'provinceCounts' => $provinceCounts,
                 'countyCounts' => $countyCounts,
+                'types' => $types,
             ]);
         } catch (\Throwable $e) {
             Log::error('خطا در بارگذاری نقشه: ' . $e->getMessage());

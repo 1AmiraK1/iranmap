@@ -143,8 +143,16 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             const formData = new FormData(searchForm);
             console.log(Object.fromEntries(formData));
-            const addressInput = e.target.elements.address;
-            updateCardsList('/map-search/{province?}/{county?}/{title?}/{address?}');
+
+            const province = searchForm.elements['province-search']?.value || '';
+            const county = searchForm.elements['county-search']?.value || '';
+            const title = searchForm.elements['title-search']?.value || '';
+            const address = searchForm.elements['address-search']?.value || '';
+            const type = searchForm.elements['type-search']?.value || '';
+
+            const url = `/map-search/${encodeURIComponent(province)}/${encodeURIComponent(county)}/${encodeURIComponent(title)}/${encodeURIComponent(address)}/${encodeURIComponent(type)}`;
+            
+            updateCardsList(url);
         });
     }
 });

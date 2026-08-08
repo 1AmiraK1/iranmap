@@ -1,39 +1,44 @@
 <form name="search-form" id="search-form">
     <div class="row mb-3">
         <div class="col form-floating">
-            <input type="text" class="form-control" id="title" name="title" placeholder="عنوان و نام مرکز" autocomplete="organization-title">
-            <label for="title">اسم مرکز</label>
+            <input type="text" class="form-control" id="title-search" name="title-search" placeholder="عنوان و نام مرکز"
+                autocomplete="organization-title">
+            <label for="title-search">اسم مرکز</label>
         </div>
         <div class="col form-floating">
-            <input type="text" class="form-control" id="address" name="address" placeholder="آدرس مرکز" autocomplete="address-line1">
-            <label for="address">آدرس</label>
+            <input type="text" class="form-control" id="address-search" name="address-search" placeholder="آدرس مرکز"
+                autocomplete="address-line1">
+            <label for="address-search">آدرس</label>
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col">
-            <select class="form-select" aria-label="Default select example" name="province">
-                <option selected>استان</option>
+        <div class="col form-floating">
+            <select class="form-select" aria-label="Default select example" name="province-search" id="province-search">
+                <option disabled selected>انتخاب کنید ...</option>
                 <option value="1">One</option>
                 <option value="2">Two</option>
                 <option value="3">Three</option>
             </select>
+            <label for="province-search">استان</label>
         </div>
-        <div class="col">
-            <select class="form-select" aria-label="Default select example" name="county">
-                <option selected>شهر</option>
+        <div class="col form-floating">
+            <select class="form-select" aria-label="Default select example" name="county-search" id="county-search">
+                <option disabled selected>انتخاب کنید ...</option>
                 <option value="1">One</option>
                 <option value="2">Two</option>
                 <option value="3">Three</option>
             </select>
+            <label for="county-search">شهر</label>
         </div>
-        <div class="col">
-            <select class="form-select" aria-label="Default select example" name="type">
-                <option selected>نوع</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+        <div class="col form-floating">
+            <select class="form-select" aria-label="Default select example" name="type-search" id="type-search">
+                <option disabled selected>انتخاب کنید ...</option>
+                @foreach ($types as $type)
+                    <option value="{{$type->id}}">{{$type->type_title}}</option>
+                @endforeach
             </select>
+            <label for="type-search">نوع</label>
         </div>
     </div>
-            <button type="submit" id="search-submit" class="btn btn-primary container">جستجو</button>
+    <button type="submit" id="search-submit" class="btn btn-primary container">جستجو</button>
 </form>
